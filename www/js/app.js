@@ -186,13 +186,15 @@
             contentType: "application/json",
             data: JSON.stringify(parameters),
             error,
-            success,
+            success: function (data) {
+                success(data, parameters);
+            },
             type: "POST",
             url: path
         });
     };
 
-    var processJson = function (response) {
+    var processJson = function (response, parameters) {
         var parameters;
         var target;
 
@@ -237,7 +239,7 @@
             location.reload();
             break;
         case "validation":
-            target = $(response.target);
+            target = $(parameters["form-id"]);
             $.each(response.errors, function (ignore, error) {
                 $(".invalid-feedback[data-name='" + error.name + "']", target).text(error.message).show();
             });
@@ -364,9 +366,9 @@
 
     var settings = $.extend({overview: "overview"}, $("script:last").data());
 
-    var success = function (data) {
+    var success = function (data, parameters) {
         if ($.isPlainObject(data)) {
-            processJson(data);
+            processJson(data, parameters);
         } else {
             $("response", data).each(processXml);
         }
