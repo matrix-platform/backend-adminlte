@@ -1,0 +1,23 @@
+{% macro render(nodes) %}
+    {% for path, node in nodes|sort((a, b) => a.ranking <=> b.ranking) %}
+        {% if node.nodes %}
+            <li class="has-treeview nav-item">
+                <a class="nav-link" data-branch="{{ path }}">
+                    <i class="nav-icon {{ node.icon|default('far fa-circle') }}"></i>
+                    {{ label(node.i18n) }}
+                    <i class="fas fa-angle-left right"></i>
+                </a>
+                <ul class="nav nav-treeview">
+                    {{ _self.render(node.nodes) }}
+                </ul>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" data-ajax data-leaf href="{{ path }}">
+                    <i class="nav-icon {{ node.icon|default('far fa-circle') }}"></i>
+                    {{ label(node.i18n) }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
