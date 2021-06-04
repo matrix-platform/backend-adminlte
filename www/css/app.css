@@ -104,11 +104,11 @@ th a, th:hover a {
 }
 
 @media (min-width: 1600px) {
-    .form-wrapper .tab-pane {
+    .multi-column .form-wrapper .tab-pane {
         column-count: 2;
     }
 
-    .form-wrapper .tab-pane > div {
+    .multi-column .form-wrapper .tab-pane > div {
         break-inside: avoid;
     }
 }
