@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>{{ header('Content-Type: text/xml; charset=UTF-8') }}
+<response>
+
+    <target>{% block target %}{% endblock %}</target>
+
+    <preprocess><![CDATA[{% block preprocess %}{% endblock %}]]></preprocess>
+
+    <html><![CDATA[{% block html %}{% endblock %}]]></html>
+
+    <postprocess><![CDATA[{% block postprocess %}{% endblock %}]]></postprocess>
+
+</response>

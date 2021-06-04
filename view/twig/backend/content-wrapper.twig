@@ -1,0 +1,20 @@
+{% extends 'backend/response.twig' %}
+
+{% block target %}.content-wrapper{% endblock %}
+
+{% block html %}
+    <div class="content pt-3">
+        <div class="container-fluid">
+            {% block header %}{% endblock %}
+        </div>
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block postprocess %}
+    toggleMenu();
+{% endblock %}
