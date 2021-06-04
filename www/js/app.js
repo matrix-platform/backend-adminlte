@@ -391,7 +391,7 @@
     };
 
     window.editLabel = function (name) {
-        perform("text", {name});
+        perform("label", {name});
     };
 
     window.initForm = function (form) {

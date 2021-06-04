@@ -1,0 +1,9 @@
+{% extends 'backend/response.twig' %}
+
+{% block postprocess %}
+    toastr.info("{{ i18n('backend.save-success') }}");
+
+    $("[data-edit='{{ form.name }}']").data("length", {{ i18n(form.name, '')|length }}).html({{ i18n(form.name)|json_encode|raw }});
+
+    $(".modal-wrapper .modal").modal("hide");
+{% endblock %}

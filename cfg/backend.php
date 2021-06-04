@@ -4,6 +4,10 @@ return [
 
     'index' => 'backend/index.twig',
 
+    'label' => 'backend/label.twig',
+
+    'label-updated' => 'backend/label-updated.twig',
+
     'login-form' => 'backend/login-form.twig',
 
     'overview' => 'backend/overview.twig',
