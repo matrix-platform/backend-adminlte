@@ -390,6 +390,8 @@
         });
     };
 
+    window.destroyForm = destroy;
+
     window.editLabel = function (name) {
         perform("label", {name});
     };

@@ -1,0 +1,35 @@
+{% set superuser = constant('USER_ID') == 1 %}
+{% for style in styles %}
+    {% if style.column.multilingual %}
+        {% for lang in constant('LANGUAGES') %}
+            {% set local = "#{style.name}__#{lang}" %}
+            {% if style.type == 'hidden' %}
+                {% include 'backend/component/hidden.twig' with {data, name: local} only %}
+            {% else %}
+                <div class="form-group">
+                    <label>
+                        {% if style.required %}<span class="text-danger">*</span>{% endif %}
+                        {{ label(style.column.i18n ?: style.i18n, local) }} ({{ cfg("i18n/#{lang}.title") }})
+                    </label>
+                    <span class="invalid-feedback" data-name="{{ local }}"></span>
+                    {% if superuser %}<span class="hint">{{ local }}</span>{% endif %}
+                    {% include 'backend/component.twig' with {controller, data, style: style|merge({name: local})} only %}
+                    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '') }}</span>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% elseif style.type == 'hidden' %}
+        {% include 'backend/component/hidden.twig' with {data, name: style.name} only %}
+    {% else %}
+        <div class="form-group">
+            <label>
+                {% if style.required %}<span class="text-danger">*</span>{% endif %}
+                {{ label(style.column.i18n ?: style.i18n, style.name) }}
+            </label>
+            <span class="invalid-feedback" data-name="{{ style.name }}"></span>
+            {% if superuser %}<span class="hint">{{ style.name }}</span>{% endif %}
+            {% include 'backend/component.twig' with {controller, data, style} only %}
+            <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '') }}</span>
+        </div>
+    {% endif %}
+{% endfor %}
