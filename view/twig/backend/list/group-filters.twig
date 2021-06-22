@@ -1,0 +1,15 @@
+<div class="mt-2">
+    <div class="btn-group mr-1">
+        <button type="button" class="btn btn-default">
+            {{ label("options/list-group.#{form.g ?: 0}") }}
+        </button>
+        <button type="button" class="btn btn-default dropdown-icon dropdown-toggle" data-toggle="dropdown"></button>
+        <div class="dropdown-menu">
+            {% for group in groups %}
+                <a class="dropdown-item" data-ajax href="{{ build(path, parameters, {g: group ?: null}) }}">
+                    {{ label("options/list-group.#{group}") }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="card">
+    <div class="card-body p-1">
+        {% for item in controls %}
+            {% with item %}
+                {% if least is not null %}
+                    <button class="btn btn-app m-1" data-ajax="{{ build(path, parameters) }}" data-least="{{ least }}"{{ least ? ' disabled' }}>
+                        <i class="{{ cfg("backend.icon-#{type}") }}"></i>
+                        {{ label(i18n ?: "backend.#{type}") }}
+                    </button>
+                {% elseif upload %}
+                    <span>
+                        <input class="d-none" data-ajax="{{ build(path, parameters) }}" type="file">
+                        <button class="btn btn-app m-1" data-upload>
+                            <i class="{{ cfg("backend.icon-#{type}") }}"></i>
+                            {{ label(i18n ?: "backend.#{type}") }}
+                        </button>
+                    </span>
+                {% else %}
+                    <a class="btn btn-app m-1" data-ajax href="{{ build(path, backward) }}">
+                        <i class="{{ cfg("backend.icon-#{type}") }}"></i>
+                        {{ label(i18n ?: "backend.#{type}") }}
+                    </a>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+</div>

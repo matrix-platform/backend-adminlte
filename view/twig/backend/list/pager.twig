@@ -1,0 +1,35 @@
+{% set max = (count / size)|round(0, 'ceil') %}
+<div class="card-footer">
+    <div class="float-left my-2 text-muted">
+        {% with {count: count, page: block('page', 'backend/list/blocks.twig'), size: block('size', 'backend/list/blocks.twig')} only %}
+            {{ include(template_from_string(label('backend.list-rows'))) }}
+        {% endwith %}
+    </div>
+    <div class="float-right">
+        {% if count > size and size > 0 %}
+            <ul class="mb-0 pagination">
+                {% set from, to = page - 2, page + 2 %}
+                {% if from > 1 %}
+                    {{ _self.pager(path, parameters, 0, 1, '&laquo;') }}
+                {% endif %}
+                {% for num in from..to %}
+                    {% if 1 <= num and num <= max %}
+                        {{ _self.pager(path, parameters, page, num - page) }}
+                    {% endif %}
+                {% endfor %}
+                {% if to < max %}
+                    {{ _self.pager(path, parameters, 0, max, '&raquo;') }}
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% macro pager(path, parameters, page, diff, label) %}
+    {% set page = page + diff %}
+    {% set path = build(path, parameters, {p: page}) %}
+    {% if diff %}
+        <li class="page-item"><a class="page-link px-2" data-ajax href="{{ path }}">{{ label|default(page)|raw }}</a></li>
+    {% else %}
+        <li class="active page-item"><a class="page-link px-2">{{ page }}</a></li>
+    {% endif %}
+{% endmacro %}

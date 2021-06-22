@@ -1,0 +1,20 @@
+{% block page %}
+    <select name="p">
+        {% for value in 1..max %}
+            <option{{ value == page ? ' selected' }} value="{{ value }}">{{ value }}</option>
+        {% endfor %}
+    </select>
+    / {{ max }}
+{% endblock %}
+
+{% block size %}
+    {% set sizes = [10, 20, 30, 50, 100] %}
+    {% if size not in sizes %}
+        {% set sizes = sizes|merge([size])|sort %}
+    {% endif %}
+    <select data-reaction="user/change-page-size" name="s">
+        {% for value in sizes %}
+            <option{{ value == size ? ' selected' }} value="{{ value }}">{{ value }}</option>
+        {% endfor %}
+    </select>
+{% endblock %}

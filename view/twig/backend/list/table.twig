@@ -1,0 +1,97 @@
+<table class="table table-hover table-responsive table-striped" id="_{{ formId }}">
+    <thead>
+        <tr>
+            <th class="w-1">#</th>
+            {% if selectable %}
+                <th class="w-1">
+                    <div class="d-inline icheck-primary">
+                        <input data-all id="_{{ formId }}_checkbox" type="checkbox">
+                        <label for="_{{ formId }}_checkbox"></label>
+                    </div>
+                </th>
+            {% endif %}
+            {% if actions %}
+                <th class="w-1">{{ label('backend.operation') }}</th>
+            {% endif %}
+            {% for style in styles %}
+                <th>
+                    {% if style.column.unordered %}
+                        {{ label(style.column.i18n ?: style.i18n) }}
+                    {% else %}
+                        {% if not orders[style.name] %}
+                            {% set icon, order = 'fas fa-sort', style.name %}
+                        {% elseif orders[style.name] > 0 %}
+                            {% set icon, order = 'fas fa-sort-up', "-#{style.name}" %}
+                        {% else %}
+                            {% set icon, order = 'fas fa-sort-down', null %}
+                        {% endif %}
+                        <a data-ajax href="{{ build(path, parameters, {o: order}) }}">
+                            {{ label(style.column.i18n ?: style.i18n) }}
+                            <i class="{{ icon }} ml-2"></i>
+                        </a>
+                    {% endif %}
+                </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% set num, total = (page - 1) * size, {} %}
+        {% for data in list %}
+            <tr>
+                <td>{{ num + loop.index }}</td>
+                {% if selectable %}
+                    <td>
+                        <div class="d-inline icheck-primary">
+                            <input data-id="{{ data.id }}" id="_{{ formId }}_{{ data.id }}" type="checkbox">
+                            <label for="_{{ formId }}_{{ data.id }}"></label>
+                        </div>
+                    </td>
+                {% endif %}
+                {% if actions %}
+                    <td>
+                        {% for action in actions %}
+                            {% set button = cfg("backend.button-#{action.type}") %}
+                            {% set icon = cfg("backend.icon-#{action.type}") %}
+                            {% set title = i18n(action.i18n ?: "backend.#{action.type}") %}
+                            {% if action.method %}
+                                <button class="{{ button }}" data-ajax="{{ controller.node }}/{{ action.method }}/{{ data.id }}" title="{{ title }}">
+                                    <i class="{{ icon }}"></i>
+                                </button>
+                            {% else %}
+                                <a class="{{ button }}" data-ajax href="{{ build("#{controller.node}/#{data.id}", backward) }}" title="{{ title }}">
+                                    <i class="{{ icon }}"></i>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endif %}
+                {% for style in styles %}
+                    {% if style.column.subtotal and data[style.name] %}
+                        {% set total = total|merge({(style.name): total[style.name] + data[style.name]}) %}
+                    {% endif %}
+                    <td data-column="{{ style.name }}">
+                        {% include 'backend/component.twig' with {controller, data, grid: true, style} only %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% else %}
+            <tr>
+                <td class="text-center" colspan="{{ 1 + (selectable ? 1 : 0) + (actions ? 1 : 0) + styles|length }}">
+                    {{ label('error.data-not-found') }}
+                </td>
+            </tr>
+        {% endfor %}
+        {% block subtotal %}
+            {% if total %}
+                <tr>
+                    <td class="text-center" colspan="{{ 1 + (selectable ? 1 : 0) + (actions ? 1 : 0) }}">
+                        {{ label('backend.subtotal') }}
+                    </td>
+                    {% for style in styles %}
+                        <td>{{ total[style.name] }}</td>
+                    {% endfor %}
+                </tr>
+            {% endif %}
+        {% endblock %}
+    </tbody>
+</table>

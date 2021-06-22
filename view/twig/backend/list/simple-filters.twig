@@ -1,0 +1,35 @@
+<div class="mt-2">
+    <div class="d-flex" id="_{{ formId }}_filter">
+        <div class="mr-1">
+            <select class="form-control select2bs4" data-search style="min-width:10rem;">
+                {% for style in filters %}
+                    <option value="{{ style.name }}"{{ style.selected ? ' selected' }}>
+                        {{- i18n(style.column.i18n ?: style.i18n) -}}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="row ml-0 mr-1" style="width:24rem;">
+            {% for style in filters %}
+                {% if style.search == 'between' %}
+                    <div class="{{ not style.selected ? 'd-none ' }}col-12 col-md mr-1 p-0" data-name="{{ style.name }}">
+                        {% include 'backend/component.twig' with {data, style} only %}
+                    </div>
+                    <div class="{{ not style.selected ? 'd-none ' }}col-12 col-md mt-1 mt-md-0 p-0" data-name="{{ style.name }}">
+                        {% set style = style|merge({name: "-#{style.name}"}) %}
+                        {% include 'backend/component.twig' with {data, style} only %}
+                    </div>
+                {% else %}
+                    <div class="{{ not style.selected ? 'd-none ' }}col p-0" data-name="{{ style.name }}">
+                        {% include 'backend/component.twig' with {data, style} only %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div>
+            <button class="{{ cfg('backend.button-search') }}" data-form="#_{{ formId }}_filter" data-search title="{{ i18n('backend.search') }}">
+                <i class="{{ cfg('backend.icon-search') }}"></i>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="card">
+    <div class="card-body p-0" id="_{{ formId }}_filter">
+        <div class="form-group pt-2 m-0 row">
+            {% for style in filters %}
+                <div class="col-12 {{ style.search == 'between' ? 'col-md-8 col-lg-8 col-xl-6' : 'col-md-4 col-lg-4 col-xl-3' }} d-flex">
+                    <label class="col-form-label ml-1 mr-3 text-nowrap">
+                        {{ label(style.column.i18n ?: style.i18n) }}
+                    </label>
+                    <div class="flex-grow-1 ml-1">
+                        <div class="row">
+                            {% if style.search == 'between' %}
+                                {% set classes = (style.type == 'timestame') ? 'col-12 col-sm-6' : 'col' %}
+                                <div class="{{ classes }} mb-2 pl-0">
+                                    {% include 'backend/component.twig' with {data, style} only %}
+                                </div>
+                                <div class="{{ classes }} mb-2 pl-0">
+                                    {% set style = style|merge({name: "-#{style.name}"}) %}
+                                    {% include 'backend/component.twig' with {data, style} only %}
+                                </div>
+                            {% else %}
+                                <div class="col mb-2 pl-0">
+                                    {% include 'backend/component.twig' with {data, style} only %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="card-footer p-2 text-right">
+        <button class="{{ cfg('backend.button-search') }}" data-form="#_{{ formId }}_filter" data-search>
+            {{ label('backend.search') }}
+        </button>
+    </div>
+</div>

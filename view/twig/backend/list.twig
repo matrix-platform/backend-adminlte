@@ -1,0 +1,103 @@
+{% extends 'backend/content-wrapper.twig' %}
+
+{% set formId = random() %}
+
+{% block header %}
+    {% include 'backend/content-header.twig' with {
+        breadcrumbs: result.breadcrumbs,
+        description: result.subtitle,
+        title: label(controller.menu.i18n)
+    } only %}
+{% endblock %}
+
+{% block content %}
+    {% set selectable = false %}
+    {% if result.controls %}
+        {% for item in result.controls %}
+            {% if not selectable and item.least is not null %}
+                {% set selectable = true %}
+            {% endif %}
+        {% endfor %}
+        {% include 'backend/list/controls.twig' with {
+            controls: result.controls|sort((a, b) => a.ranking <=> b.ranking),
+            backward: result.backward
+        } only %}
+    {% endif %}
+    {% if result.filters %}
+        {% include 'backend/list/filters.twig' with {
+            data: controller.conditions,
+            filters: result.filters,
+            formId
+        } only %}
+    {% endif %}
+    {% if result.data is not null %}
+        <div class="card">
+            {% block content_title %}{% endblock %}
+            {% block content_filter %}
+                <div class="card-body p-0">
+                    <div class="d-xl-flex mx-2">
+                        {% if result.groups %}
+                            {% include 'backend/list/group-filters.twig' with {
+                                form,
+                                groups: result.groups,
+                                parameters: result.parameters,
+                                path: result.path
+                            } only %}
+                        {% endif %}
+                        {% if result.simple_filters %}
+                            {% include 'backend/list/simple-filters.twig' with {
+                                data: controller.conditions,
+                                filters: result.simple_filters,
+                                formId
+                            } only %}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endblock %}
+            {% block content_body %}
+                <div class="card-body p-2">
+                    {% include 'backend/list/table.twig' with {
+                        actions: result.actions|sort((a, b) => a.ranking <=> b.ranking),
+                        backward: result.backward,
+                        controller,
+                        formId,
+                        list: result.data,
+                        orders: result.orders,
+                        page: result.page,
+                        parameters: result.parameters,
+                        path: result.path,
+                        selectable,
+                        size: result.size,
+                        styles: result.styles
+                    } only %}
+                </div>
+                {% if result.buttons %}
+                    {% include 'backend/list/buttons.twig' with {
+                        buttons: result.buttons|sort((a, b) => a.ranking <=> b.ranking),
+                        formId,
+                        path: result.path
+                    } only %}
+                {% endif %}
+            {% endblock %}
+            {% block content_pager %}
+                {% if result.count %}
+                    {% include 'backend/list/pager.twig' with {
+                        count: result.count,
+                        page: result.page,
+                        parameters: result.parameters,
+                        path: result.path,
+                        size: result.size
+                    } only %}
+                {% endif %}
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block postprocess %}
+    {{ parent() }}
+
+    initForm($("#_{{ formId }}, #_{{ formId }}_filter"));
+
+    $(".table-responsive").floatingScroll();
+{% endblock %}
