@@ -200,6 +200,9 @@
 
         switch (response.type) {
         case "backward":
+            if (response.message) {
+                toastr.info(response.message);
+            }
             backward(response.backward);
             break;
         case "download":

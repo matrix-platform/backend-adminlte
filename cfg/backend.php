@@ -2,6 +2,7 @@
 
 return [
 
+    'button-delete' => 'btn btn-danger',
     'button-insert' => 'btn btn-info',
     'button-search' => 'btn btn-default',
     'button-update' => 'btn btn-info',
@@ -13,6 +14,7 @@ return [
     'icon-search' => 'fas fa-search',
     'icon-view' => 'fas fa-edit',
 
+    'delete-confirmation' => 'backend/delete-confirmation.twig',
     'form' => 'backend/form.twig',
     'form-modal' => 'backend/form/modal.twig',
     'index' => 'backend/index.twig',
