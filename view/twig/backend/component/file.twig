@@ -1,0 +1,35 @@
+{% set multiple, paths = column.multiple, data[name] ? data[name]|split(',') : [] %}
+<div>
+    <div class="{% if multiple %}file-container {% endif %}list-group rounded-0">
+        {% for path in paths %}
+            {% set info = file(path) %}
+            <div class="attachment-wrapper file-wrapper list-group-item">
+                <a download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
+                    {{ info.name }}
+                </a>
+                <div class="btn-group">
+                    <button class="btn btn-default border-0" data-ajax="file-info/{{ info.id }}" data-args="modal">
+                        <i class="fas fa-info"></i>
+                    </button>
+                    <button class="btn btn-default border-0" {% if disabled %}disabled{% else %}data-remove-attachment{% endif %}>
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                <input name="{{ name }}{{ suffix }}" type="hidden" value="{{ path }}">
+                <input name="{{ name }}#filename{{ suffix }}" type="hidden">
+            </div>
+        {% endfor %}
+        {% if not disabled or not paths %}
+            <button class="attachment-picker file-picker btn btn-default{% if paths and not multiple %} d-none{% endif %}" data-name="{{ name }}" data-suffix="{{ suffix }}"{% if disabled %} disabled{% endif %}>
+                <i class="fas fa-plus"></i>
+            </button>
+            {% if not disabled %}
+                <input class="d-none" data-format="attachment"{% if multiple %} multiple{% endif %} type="file">
+            {% endif %}
+            {% if not paths %}
+                <input name="{{ name }}{{ suffix }}" type="hidden">
+                <input name="{{ name }}#filename{{ suffix }}" type="hidden">
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<textarea class="form-control" name="{{ name }}{{ suffix }}" rows="3"
+
+    {%- if disabled %} disabled{% endif -%}
+
+    {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+
+>{{ data[name] }}</textarea>

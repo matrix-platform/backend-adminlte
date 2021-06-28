@@ -1,9 +1,75 @@
-/*global $,Blob,atob,btoa,toastr*/
+/*global $,Blob,Sortable,atob,btoa,history,toastr*/
 /*jslint browser,long*/
 
 (function () {
 
     "use strict";
+
+    var attachment = function (event) {
+        var files = event.currentTarget.files;
+        var name;
+        var picker;
+        var suffix;
+
+        if (files && files.length) {
+            picker = $(event.currentTarget).siblings(".attachment-picker");
+            name = picker.data("name");
+            suffix = picker.data("suffix");
+
+            $.each(files, function (ignore, file) {
+                var reader = new FileReader();
+
+                reader.onload = function () {
+                    var filename = file.name.replace(/"/g, "&quot;");
+
+                    overlay.hide();
+
+                    if (picker.hasClass("picture-picker")) {
+                        picker.before([
+                            `<div class="attachment-wrapper picture-wrapper rounded">`,
+                            `<div class="picture-preview">`,
+                            `<a data-toggle="lightbox" href="${reader.result}"><img alt="${filename}" src="${reader.result}"></a>`,
+                            `</div>`,
+                            `<div class="picture-controller">`,
+                            `<div class="btn-group w-100">`,
+                            `<button class="btn btn-default rounded-0" disabled><i class="fas fa-cloud-download-alt"></i></button>`,
+                            `<button class="btn btn-default rounded-0" disabled><i class="fas fa-info"></i></button>`,
+                            `<button class="btn btn-default rounded-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
+                            `</div>`,
+                            `</div>`,
+                            `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
+                            `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
+                            `</div>`
+                        ].join(""));
+                    } else {
+                        picker.before([
+                            `<div class="attachment-wrapper file-wrapper list-group-item">`,
+                            `<a download="${filename}" href="${reader.result}">`,
+                            filename.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+                            `</a>`,
+                            `<div class="btn-group">`,
+                            `<button class="btn btn-default border-0" disabled><i class="fas fa-info"></i></button>`,
+                            `<button class="btn btn-default border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
+                            `</div>`,
+                            `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
+                            `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
+                            `</div>`
+                        ].join(""));
+                    }
+                };
+
+                reader.readAsDataURL(file);
+
+                overlay.show();
+            });
+
+            picker.siblings("input[type=hidden]").remove();
+
+            if (!picker.siblings("[type=file]").val("").is("[multiple]")) {
+                picker.addClass("d-none");
+            }
+        }
+    };
 
     var backward = function (parameters) {
         var anchor = $(".breadcrumb-item a").last();
@@ -33,12 +99,14 @@
     };
 
     var combine = function (data, name, value) {
+        var current;
+
         if (empty(value)) {
             value = null;
         }
 
         if (data.hasOwnProperty(name)) {
-            var current = data[name];
+            current = data[name];
 
             if (Array.isArray(current)) {
                 current.push(value);
@@ -51,6 +119,10 @@
     };
 
     var destroy = function (target) {
+        target.find("div.file-container, div.picture-container").each(function (ignore, element) {
+            Sortable.get(element).destroy();
+        });
+
         target.find("div[data-format=color]").each(function (ignore, element) {
             $(element).data("colorpicker").destroy();
         });
@@ -194,7 +266,7 @@
         });
     };
 
-    var processJson = function (response, parameters) {
+    var processJson = function (response, request) {
         var parameters;
         var target;
 
@@ -207,6 +279,20 @@
             break;
         case "download":
             download(response);
+            break;
+        case "file-info":
+            toastr.info(response.message);
+            $(".modal-wrapper .modal").modal("hide");
+            $(`button[data-ajax="file-info/${response.id}"]`).each(function (ignore, element) {
+                var wrapper = $(element).closest(".attachment-wrapper");
+                if (wrapper.hasClass("picture-wrapper")) {
+                    wrapper.find("a[data-toggle]").attr("title", response.description);
+                    wrapper.find("a[download]").attr("download", response.name).attr("title", response.name);
+                    wrapper.find("img").attr("alt", response.name);
+                } else {
+                    wrapper.find("a").attr("download", response.name).attr("title", response.description).text(response.name);
+                }
+            });
             break;
         case "insert-images":
             $.each(response.paths, function (ignore, path) {
@@ -242,7 +328,7 @@
             location.reload();
             break;
         case "validation":
-            target = $(parameters["form-id"]);
+            target = $(request["form-id"]);
             $.each(response.errors, function (ignore, error) {
                 $(".invalid-feedback[data-name='" + error.name + "']", target).text(error.message).show();
             });
@@ -305,6 +391,7 @@
     var serialize = function (expression) {
         var data = {};
         var form = $(expression);
+        var list;
 
         form.find("input,select,textarea").each(function (ignore, element) {
             var input;
@@ -343,13 +430,14 @@
         });
 
         if (form.is("table") || form.hasClass("editable-list")) {
-            var list = {};
+            list = {};
 
             $.each(Object.keys(data), function (ignore, name) {
+                var id;
                 var tokens = name.split("@");
 
                 if (tokens.length === 2) {
-                    var id = tokens[1];
+                    id = tokens[1];
 
                     if (!list[id]) {
                         list[id] = {id};
@@ -368,6 +456,16 @@
     };
 
     var settings = $.extend({overview: "overview"}, $("script:last").data());
+
+    var sortable = function (ignore, element) {
+        Sortable.create(element, {
+            animation: 200,
+            filter: "button",
+            onMove(event) {
+                return event.related.classList.contains("attachment-wrapper");
+            }
+        });
+    };
 
     var success = function (data, parameters) {
         if ($.isPlainObject(data)) {
@@ -400,6 +498,8 @@
     };
 
     window.initForm = function (form) {
+        form.find("div.file-container, div.picture-container").each(sortable);
+
         form.find("div[data-format=color]").each(function (ignore, element) {
             var target = $(element);
             var input = target.find("input");
@@ -434,83 +534,7 @@
             });
         });
 
-        form.find("input[data-format=file]").on("change", function (event) {
-            var file = event.currentTarget.files && event.currentTarget.files[0];
-            var input = $(event.currentTarget).siblings("input[data-file]");
-
-            if (file) {
-                var reader = new FileReader();
-
-                reader.onload = function () {
-                    var preview;
-
-                    if (file.type.startsWith("image/")) {
-                        preview = "<img class=\"border shadow\" src=\"" + reader.result + "\">";
-                    } else {
-                        preview = "<span><a class=\"btn btn-default p-3\">" + file.name + "</a></span>";
-                    }
-
-                    input.val(reader.result);
-                    input.siblings("input[data-filename]").val(file.name);
-                    input.closest("div").find(".file-preview").html(preview);
-                    input.closest("div").siblings(".invalid-feedback").hide().empty();
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-        form.find("input[data-format=image]").on("change", function (event) {
-            var file = event.currentTarget.files && event.currentTarget.files[0];
-            var input = $(event.currentTarget).siblings("input[data-image]");
-            var feedback = input.closest("div").siblings(".invalid-feedback").hide().empty();
-
-            if (file) {
-                if (file.type.startsWith("image/")) {
-                    var reader = new FileReader();
-
-                    reader.onload = function () {
-                        input.val(reader.result);
-                        input.siblings("input[data-filename]").val(file.name);
-                        input.closest("div").find(".file-preview").html("<img class=\"border shadow\" src=\"" + reader.result + "\">");
-                        input.parent().siblings("a[data-remove]").removeClass("d-none");
-                    };
-
-                    reader.readAsDataURL(file);
-
-                    return;
-                }
-
-                feedback.text(input.data("error")).show();
-            }
-        });
-
-        form.find("input[data-format=images]").on("change", function (event) {
-            var files = event.currentTarget.files;
-
-            if (files && files.length) {
-                var input = $(event.currentTarget);
-                var name = input.data("name");
-
-                $.each(files, function (ignore, file) {
-                    if (file.type.startsWith("image/")) {
-                        var reader = new FileReader();
-
-                        reader.onload = function () {
-                            var container = $("<div class=\"img-wrapper\"><button class=\"close\" data-remove><span>&times;</span></button></div>");
-
-                            $("<input name=\"" + name + "\" type=\"hidden\">").val(reader.result).appendTo(container);
-                            $("<input name=\"" + name + "#filename\" type=\"hidden\">").val(file.name).appendTo(container);
-                            $("<img class=\"border shadow\">").attr("src", reader.result).appendTo(container);
-
-                            input.closest("div").find(".file-preview").append(container);
-                        };
-
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
-        });
+        form.find("input[data-format=attachment]").on("change", attachment);
 
         if ($.fn.select2) {
             form.find("select.select2bs4").select2({
@@ -608,18 +632,12 @@
         }
 
         return false;
-    }).delegate("a[data-remove]", "click", function (event) {
-        var anchor = $(event.currentTarget);
-
-        anchor.addClass("d-none");
-        anchor.siblings(".file-preview").empty();
-        anchor.siblings("label").find("input").each(function (ignore, element) {
-            $(element).val("");
-        });
     }).delegate("a[data-toggle=lightbox]", "click", function (event) {
         $(event.currentTarget).ekkoLightbox();
 
         return false;
+    }).delegate("button.attachment-picker", "click", function (event) {
+        $(event.currentTarget).siblings("input[type=file]").click();
     }).delegate("button[data-ajax]", "click", function (event) {
         var button = $(event.currentTarget);
         var form = button.data("form");
@@ -635,8 +653,20 @@
         perform(button.data("ajax"), form, options);
     }).delegate("button[data-backward]", "click", function (event) {
         backward($(event.currentTarget).data("backward"));
-    }).delegate("button[data-remove]", "click", function (event) {
-        $(event.currentTarget).closest("div").remove();
+    }).delegate("button[data-remove-attachment]", "click", function (event) {
+        var file = $(event.currentTarget).closest(".attachment-wrapper");
+        var name;
+        var picker = file.siblings(".attachment-picker").removeClass("d-none");
+        var suffix;
+
+        file.remove();
+
+        if (!picker.siblings(".attachment-wrapper").length) {
+            name = picker.data("name");
+            suffix = picker.data("suffix");
+
+            picker.after(`<input name="${name}${suffix}" type="hidden"><input name="${name}#filename${suffix}" type="hidden">`);
+        }
     }).delegate("button[data-search]", "click", function (event) {
         var form = $(event.currentTarget).data("form");
         var data = serialize(form);
@@ -664,9 +694,10 @@
         if (!input.data("binding")) {
             input.on("change", function () {
                 var file = input[0].files && input[0].files[0];
+                var reader;
 
                 if (file) {
-                    var reader = new FileReader();
+                    reader = new FileReader();
 
                     reader.onload = function () {
                         perform(input.data("ajax"), {file: reader.result, "file#filename": file.name});

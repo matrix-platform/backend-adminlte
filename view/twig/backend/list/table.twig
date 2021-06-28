@@ -37,6 +37,7 @@
     <tbody>
         {% set num, total = (page - 1) * size, {} %}
         {% for data in list %}
+            {% set suffix = "@#{data.id}" %}
             <tr>
                 <td>{{ num + loop.index }}</td>
                 {% if selectable %}
@@ -70,7 +71,7 @@
                         {% set total = total|merge({(style.name): total[style.name] + data[style.name]}) %}
                     {% endif %}
                     <td data-column="{{ style.name }}">
-                        {% include 'backend/component.twig' with {controller, data, grid: true, style} only %}
+                        {% include 'backend/component.twig' with {controller, data, style, suffix} only %}
                     </td>
                 {% endfor %}
             </tr>

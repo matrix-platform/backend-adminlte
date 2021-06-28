@@ -1,0 +1,31 @@
+{% set values = string(data[name])|split(',') %}
+<div class="d-flex">
+    <div class="flex-grow-1">
+        <select class="form-control select2bs4 w-100" name="{{ name }}{{ suffix }}"
+
+            {%- if column.reaction %} data-reaction="{{ column.reaction }}"{% endif -%}
+
+            {%- if column.association and column.options|length >= 10 %} data-searchable{% endif -%}
+
+            {%- if disabled %} disabled{% endif -%}
+
+            {%- if column.multiple %} multiple{% endif -%}
+
+        >
+            {% if not required or values is null %}
+                <option value="">&nbsp;</option>
+            {% endif %}
+            {% for key, item in column.options %}
+                <option{% if key in values %} selected{% endif %} value="{{ key }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% if column.creation and column.association %}
+        <div class="ml-1 operators">
+            {% set path = column.creation is same as true ? column.association : column.creation %}
+            <button class="btn btn-default" data-ajax="{{ path }}/new" data-args="modal" title="{{ i18n('backend.new') }}">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    {% endif %}
+</div>

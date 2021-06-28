@@ -1,6 +1,7 @@
-{% set superuser = constant('USER_ID') == 1 %}
+{% set groups, superuser = [], constant('USER_ID') == 1 %}
 {% for style in styles %}
-    {% if style.column.multilingual %}
+    {% set column = style.column %}
+    {% if column.multilingual %}
         {% for lang in constant('LANGUAGES') %}
             {% set local = "#{style.name}__#{lang}" %}
             {% if style.type == 'hidden' %}
@@ -9,27 +10,41 @@
                 <div class="form-group">
                     <label>
                         {% if style.required %}<span class="text-danger">*</span>{% endif %}
-                        {{ label(style.column.i18n ?: style.i18n, local) }} ({{ cfg("i18n/#{lang}.title") }})
+                        {{ label(column.i18n ?: style.i18n, local) }} ({{ cfg("i18n/#{lang}.title") }})
                     </label>
                     <span class="invalid-feedback" data-name="{{ local }}"></span>
                     {% if superuser %}<span class="hint">{{ local }}</span>{% endif %}
                     {% include 'backend/component.twig' with {controller, data, style: style|merge({name: local})} only %}
-                    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '') }}</span>
+                    <span class="text-secondary text-xs">{{ label(column.remark ?: "#{style.i18n}.remark", '') }}</span>
                 </div>
             {% endif %}
         {% endfor %}
     {% elseif style.type == 'hidden' %}
         {% include 'backend/component/hidden.twig' with {data, name: style.name} only %}
+    {% elseif column.group %}
+        {% if column.group not in groups %}
+            {% set groups = groups|merge([column.group]) %}
+            <div class="row">
+                {% for item in styles|filter(s => s.column.group == column.group and not s.column.multilingual and s.type != 'hidden') %}
+                    <div class="col form-group">
+                        {{ _self.input(controller, data, item, superuser) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% else %}
         <div class="form-group">
-            <label>
-                {% if style.required %}<span class="text-danger">*</span>{% endif %}
-                {{ label(style.column.i18n ?: style.i18n, style.name) }}
-            </label>
-            <span class="invalid-feedback" data-name="{{ style.name }}"></span>
-            {% if superuser %}<span class="hint">{{ style.name }}</span>{% endif %}
-            {% include 'backend/component.twig' with {controller, data, style} only %}
-            <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '') }}</span>
+            {{ _self.input(controller, data, style, superuser) }}
         </div>
     {% endif %}
 {% endfor %}
+{% macro input(controller, data, style, superuser) %}
+    <label>
+        {% if style.required %}<span class="text-danger">*</span>{% endif %}
+        {{ label(style.column.i18n ?: style.i18n, style.name) }}
+    </label>
+    <span class="invalid-feedback" data-name="{{ style.name }}"></span>
+    {% if superuser %}<span class="hint">{{ style.name }}</span>{% endif %}
+    {% include 'backend/component.twig' %}
+    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '') }}</span>
+{% endmacro %}

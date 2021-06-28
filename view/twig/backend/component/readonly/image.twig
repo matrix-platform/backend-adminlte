@@ -1,0 +1,14 @@
+<div class="d-flex flex-wrap">
+    {% for path in data[name] ? data[name]|split(',') : [] %}
+        {% set href, info = path|img, file(path) %}
+        <div class="p-1">
+            <div class="picture-wrapper rounded">
+                <div class="picture-preview">
+                    <a data-toggle="lightbox" href="{{ href }}" title="{{ info.description }}">
+                        <img alt="{{ info.name }}" src="{{ href }}">
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,16 @@
+{% set prefix, value = random(), string(data[name]) %}
+<div class="p-1">
+    {% for key, item in column.options %}
+        <span class="icheck-primary">
+            {% set id = "#{prefix}-#{key}" %}
+            <input id="{{ id }}" name="{{ name }}{{ suffix }}" type="radio" value="{{ key }}"
+
+                {%- if key == value %} checked{% endif -%}
+
+                {%- if disabled %} disabled{% endif -%}
+
+            />
+            <label class="mb-2 mr-3" for="{{ id }}">{{ item }}</label>
+        </span>
+    {% endfor %}
+</div>

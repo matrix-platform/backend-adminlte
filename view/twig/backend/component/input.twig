@@ -1,0 +1,15 @@
+<input class="form-control" name="{{ name }}{{ suffix }}" type="{{ type }}"
+
+    {%- if autocomplete %} autocomplete="{{ autocomplete }}"{% endif -%}
+
+    {%- if format %} data-format="{{ format }}"{% endif -%}
+
+    {%- if pattern %} data-pattern="{{ pattern }}"{% endif -%}
+
+    {%- if disabled %} disabled{% endif -%}
+
+    {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+
+    {%- if data[name] is not null %} value="{{ data[name] }}"{% endif -%}
+
+/>

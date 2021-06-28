@@ -1,0 +1,43 @@
+{% set multiple, paths = column.multiple, data[name] ? data[name]|split(',') : [] %}
+<div>
+    <div class="{% if multiple %}picture-container{% else %}d-inline-block{% endif %}">
+        {% for path in paths %}
+            {% set href, info = path|img, file(path) %}
+            <div class="attachment-wrapper picture-wrapper rounded">
+                <div class="picture-preview">
+                    <a data-toggle="lightbox" href="{{ href }}" title="{{ info.description }}">
+                        <img alt="{{ info.name }}" src="{{ href }}">
+                    </a>
+                </div>
+                <div class="picture-controller">
+                    <div class="btn-group w-100">
+                        <a class="btn btn-default rounded-0" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.name }}">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </a>
+                        <button class="btn btn-default rounded-0" data-ajax="file-info/{{ info.id }}" data-args="modal">
+                            <i class="fas fa-info"></i>
+                        </button>
+                        <button class="btn btn-default rounded-0" {% if disabled %}disabled{% else %}data-remove-attachment{% endif %}>
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <input name="{{ name }}{{ suffix }}" type="hidden" value="{{ path }}">
+                <input name="{{ name }}#filename{{ suffix }}" type="hidden">
+            </div>
+        {% endfor %}
+        {% if not disabled or not paths %}
+            <button class="attachment-picker picture-picker btn btn-app{% if paths and not multiple %} d-none{% endif %}" data-name="{{ name }}" data-suffix="{{ suffix }}"{% if disabled %} disabled{% endif %}>
+                <i class="fas fa-plus"></i>
+            </button>
+            {% if not disabled %}
+                <input accept="image/*" class="d-none" data-format="attachment"{% if multiple %} multiple{% endif %} type="file">
+            {% endif %}
+            {% if not paths %}
+                <input name="{{ name }}{{ suffix }}" type="hidden">
+                <input name="{{ name }}#filename{{ suffix }}" type="hidden">
+            {% endif %}
+        {% endif %}
+        {% if multiple %}{% for i in 1..10 %}<div class="picture-fill"></div>{% endfor %}{% endif %}
+    </div>
+</div>

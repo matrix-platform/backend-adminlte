@@ -1,0 +1,6 @@
+{% include 'backend/component/input.twig' with {
+    autocomplete: 'off',
+    format: 'date',
+    pattern: column.pattern|replace({Y: 'YYYY', m: 'MM', d: 'DD'}),
+    type: 'text'
+} %}

@@ -1,0 +1,6 @@
+{% for path in data[name] ? data[name]|split(',') : [] %}
+    {% set info = file(path) %}
+    <a class="d-block py-1" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
+        {{ info.name }}
+    </a>
+{% endfor %}
