@@ -5,7 +5,7 @@
             {% if selectable %}
                 <th class="w-1">
                     <div class="d-inline icheck-primary">
-                        <input data-all id="_{{ formId }}_checkbox" type="checkbox">
+                        <input data-all data-group="{{ formId }}" id="_{{ formId }}_checkbox" type="checkbox">
                         <label for="_{{ formId }}_checkbox"></label>
                     </div>
                 </th>
@@ -43,7 +43,7 @@
                 {% if selectable %}
                     <td>
                         <div class="d-inline icheck-primary">
-                            <input data-id="{{ data.id }}" id="_{{ formId }}_{{ data.id }}" type="checkbox">
+                            <input data-group="{{ formId }}" data-id="{{ data.id }}" id="_{{ formId }}_{{ data.id }}" type="checkbox">
                             <label for="_{{ formId }}_{{ data.id }}"></label>
                         </div>
                     </td>

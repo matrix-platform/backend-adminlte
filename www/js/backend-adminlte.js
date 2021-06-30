@@ -731,16 +731,18 @@
 
         input.click();
     }).delegate("input[data-all][type=checkbox]", "change", function (event) {
-        var list = $("input[data-id][type=checkbox]");
+        var checkbox = $(event.currentTarget);
+        var list = $(`input[data-group=${checkbox.data("group")}][data-id][type=checkbox]`);
 
-        list.prop("checked", $(event.currentTarget).prop("checked"));
+        list.prop("checked", checkbox.prop("checked"));
 
         toggleControls(list.filter(":checked"));
-    }).delegate("input[data-id][type=checkbox]", "change", function () {
-        var list = $("input[data-id][type=checkbox]");
+    }).delegate("input[data-id][type=checkbox]", "change", function (event) {
+        var group = $(event.currentTarget).data("group");
+        var list = $(`input[data-group=${group}][data-id][type=checkbox]`);
         var checked = list.filter(":checked");
 
-        $("input[data-all][type=checkbox]").prop("checked", list.length === checked.length);
+        $(`input[data-all][data-group=${group}][type=checkbox]`).prop("checked", list.length === checked.length);
 
         toggleControls(checked);
     }).delegate("select[data-reaction]", "change", function (event) {
