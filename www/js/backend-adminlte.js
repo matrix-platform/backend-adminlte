@@ -537,13 +537,22 @@
         form.find("input[data-format=attachment]").on("change", attachment);
 
         if ($.fn.select2) {
-            form.find("select.select2bs4").select2({
-                theme: "bootstrap4"
+            form.find("select.select2bs4").each(function (ignore, element) {
+                var select = $(element);
+                var options = {theme: "bootstrap4"};
+
+                if (!select.is("[data-searchable]")) {
+                    options.minimumResultsForSearch = Infinity;
+                }
+
+                select.select2(options);
             }).filter("[data-search]").on("change", function (event) {
                 var select = $(event.currentTarget);
                 var inputs = select.closest("[id]").find("[data-name]");
 
-                inputs.filter(":visible").addClass("d-none").find("input,select").val("").filter("select").trigger("change");
+                inputs.filter(":visible").addClass("d-none");
+                inputs.find("input").val("");
+                inputs.find("option:selected").prop("selected", false).closest("select").trigger("change");
                 inputs.filter("[data-name='" + select.val() + "']").removeClass("d-none");
             });
         }
@@ -674,10 +683,18 @@
         var search = {};
 
         $.each(Object.keys(data), function (ignore, name) {
-            var value = $.trim(data[name]);
+            var value = data[name];
 
-            if (value) {
-                search[name] = encodeURIComponent(value);
+            if (Array.isArray(value)) {
+                if (value.length) {
+                    search[name] = value.map(encodeURIComponent);
+                }
+            } else {
+                value = $.trim(value);
+
+                if (value) {
+                    search[name] = encodeURIComponent(value);
+                }
             }
         });
 

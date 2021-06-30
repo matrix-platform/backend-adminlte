@@ -60,6 +60,10 @@ th a, th:hover a {
     margin: 0 auto;
 }
 
+.select2-selection__choice__remove {
+    margin-top: -1px;
+}
+
 .table td {
     vertical-align: middle;
 }

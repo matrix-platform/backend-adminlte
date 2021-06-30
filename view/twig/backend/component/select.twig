@@ -1,4 +1,4 @@
-{% set values = string(data[name])|split(',') %}
+{% set multiple, values = column.multiple or search is defined, string(data[name])|split(',') %}
 <div class="d-flex">
     <div class="flex-grow-1">
         <select class="form-control select2bs4 w-100" name="{{ name }}{{ suffix }}"
@@ -9,11 +9,11 @@
 
             {%- if disabled %} disabled{% endif -%}
 
-            {%- if column.multiple %} multiple{% endif -%}
+            {%- if multiple %} multiple{% endif -%}
 
         >
             {% if not required or values is null %}
-                <option value="">&nbsp;</option>
+                {% if not multiple %}<option value="">&nbsp;</option>{% endif %}
             {% endif %}
             {% for key, item in column.options %}
                 <option{% if key in values %} selected{% endif %} value="{{ key }}">{{ item }}</option>
