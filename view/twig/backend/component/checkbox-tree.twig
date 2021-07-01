@@ -12,7 +12,7 @@
                     <span class="d-none d-md-inline" style="padding-left:{{ padding }}px;">
                         {% if node.tags %}
                             <div class="d-inline icheck-primary">
-                                <input data-all data-group="{{ path }}" id="{{ path }}:*" type="checkbox">
+                                <input{% if node.tags|length == data[path]|length %} checked{% endif %} data-all data-group="{{ path }}" id="{{ path }}:*" type="checkbox">
                                 <label for="{{ path }}:*">{{ i18n(node.i18n) }}</label>
                             </div>
                         {% else %}
