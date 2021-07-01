@@ -491,6 +491,14 @@
         });
     };
 
+    toastr.options = {
+        onclick(event) {
+            event.clickToClose = true;
+        },
+        progressBar: true,
+        timeOut: 3000
+    };
+
     window.destroyForm = destroy;
 
     window.editLabel = function (name) {
@@ -560,7 +568,7 @@
         if ($.fn.summernote) {
             form.find("textarea[data-format=html]").each(function (ignore, element) {
                 var editor = $(element);
-                var config = {height: 300};
+                var config = {height: 300, placeholder: editor.data("placeholder")};
 
                 if (editor.is("[data-disabled]")) {
                     config.toolbar = [];

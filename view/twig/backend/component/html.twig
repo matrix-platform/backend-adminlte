@@ -2,4 +2,6 @@
 
     {%- if disabled %} data-disabled{% endif -%}
 
+    {%- if placeholder %} data-placeholder="{{ placeholder }}"{% endif -%}
+
 >{{ data[name] }}</textarea>
