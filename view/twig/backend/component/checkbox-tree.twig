@@ -4,33 +4,31 @@
     </div>
 </div>
 {% macro render_tree(data, name, nodes, padding) %}
-    {% for path, node in nodes|sort((a, b) => a.ranking <=> b.ranking) %}
+    {% for path, node in nodes|filter(n => n.tags or n.nodes)|sort((a, b) => a.ranking <=> b.ranking) %}
         {% if loop.index0 and not padding %}<hr>{% endif %}
-        {% if node.tags is null or node.tags|length > 0 %}
-            <div class="form-group row">
-                <div class="col-md-5">
-                    <span class="d-none d-md-inline" style="padding-left:{{ padding }}px;">
-                        {% if node.tags %}
-                            <div class="d-inline icheck-primary">
-                                <input{% if node.tags|length == data[path]|length %} checked{% endif %} data-all data-group="{{ path }}" id="{{ path }}:*" type="checkbox">
-                                <label for="{{ path }}:*">{{ i18n(node.i18n) }}</label>
-                            </div>
-                        {% else %}
-                            <label>{{ i18n(node.i18n) }}</label>
-                        {% endif %}
-                    </span>
-                </div>
-                <div class="col-md-7">
-                    {% for tag in node.tags %}
-                        {% set value = "#{path}:#{tag}" %}
-                        <span class="icheck-default">
-                            <input{% if data[path][tag] %} checked{% endif %} data-group="{{ path }}" data-id id="{{ value }}" name="{{ name }}" type="checkbox" value="{{ value }}">
-                            <label class="mr-3 my-2 my-md-0" for="{{ value }}">{{ i18n("options/#{name}.#{tag}") }}</label>
-                        </span>
-                    {% endfor %}
-                </div>
+        <div class="form-group row">
+            <div class="col-md-5">
+                <span class="d-none d-md-inline" style="padding-left:{{ padding }}px;">
+                    {% if node.tags %}
+                        <div class="d-inline icheck-primary">
+                            <input{% if node.tags|length == data[path]|length %} checked{% endif %} data-all data-group="{{ path }}" id="{{ path }}:*" type="checkbox">
+                            <label for="{{ path }}:*">{{ i18n(node.i18n) }}</label>
+                        </div>
+                    {% else %}
+                        <label>{{ i18n(node.i18n) }}</label>
+                    {% endif %}
+                </span>
             </div>
-        {% endif %}
+            <div class="col-md-7">
+                {% for tag in node.tags %}
+                    {% set value = "#{path}:#{tag}" %}
+                    <span class="icheck-default">
+                        <input{% if data[path][tag] %} checked{% endif %} data-group="{{ path }}" data-id id="{{ value }}" name="{{ name }}" type="checkbox" value="{{ value }}">
+                        <label class="mr-3 my-2 my-md-0" for="{{ value }}">{{ i18n("options/#{name}.#{tag}") }}</label>
+                    </span>
+                {% endfor %}
+            </div>
+        </div>
         {% if node.nodes %}
             {{ _self.render_tree(data, name, node.nodes, padding + 30) }}
         {% endif %}
