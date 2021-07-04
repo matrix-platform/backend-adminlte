@@ -254,7 +254,7 @@
             $.extend(parameters, options.parameters);
         }
 
-        $.ajax({
+        return $.ajax({
             contentType: "application/json",
             data: JSON.stringify(parameters),
             error,
@@ -753,6 +753,12 @@
         $(`input[data-all][data-group="${group}"][type=checkbox]`).prop("checked", list.length === checked.length);
 
         toggleControls(checked);
+    }).delegate("input[data-switch][type=checkbox]", "change", function (event) {
+        var checkbox = $(event.currentTarget);
+        var value = checkbox.prop("checked");
+        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}).fail(function () {
+            checkbox.prop("checked", !value);
+        });
     }).delegate("select[data-reaction]", "change", function (event) {
         var parameters = {};
         var select = $(event.currentTarget);
