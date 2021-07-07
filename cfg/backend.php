@@ -4,6 +4,7 @@ return [
 
     'button-delete' => 'btn btn-danger',
     'button-insert' => 'btn btn-info',
+    'button-next' => 'btn btn-info',
     'button-search' => 'btn btn-default',
     'button-update' => 'btn btn-info',
     'button-view' => 'btn btn-default',

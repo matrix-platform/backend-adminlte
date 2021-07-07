@@ -1,3 +1,7 @@
-<a data-ajax href="{{ controller.node|trim('/') }}/{{ data[column.relation.column.name] }}/{{ column.alias }}">
-    {{ data[name] }}
-</a>
+{% if data[name] is defined %}
+    <a data-ajax href="{{ controller.node|trim('/') }}/{{ data[column.relation.column.name] }}/{{ column.alias }}">
+        {{ data[name] }}
+    </a>
+{% else %}
+-
+{% endif %}
