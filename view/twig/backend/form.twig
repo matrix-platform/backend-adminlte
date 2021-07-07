@@ -61,10 +61,9 @@
             <div class="card-footer text-right">
                 {% include 'backend/form/buttons.twig' with {
                     backward: form.r,
-                    buttons: result.buttons|sort((a, b) => a.ranking <=> b.ranking),
+                    buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
                     data,
-                    formId,
-                    path: result.path
+                    formId
                 } only %}
             </div>
         {% endif %}

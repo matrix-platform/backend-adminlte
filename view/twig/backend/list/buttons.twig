@@ -1,7 +1,8 @@
 <div class="card-body p-2 text-center">
     {% for button in buttons %}
         {% set class = cfg("backend.button-#{button.type}") ?: 'btn btn-default' %}
-        <button class="{{ class }}" data-ajax="{{ path }}/{{ button.method ?: button.type }}" data-form="#_{{ formId }}">
+        {% set path = include(template_from_string(button.path), form, false) %}
+        <button class="{{ class }}" data-ajax="{{ path }}" data-form="#_{{ formId }}">
             {{ label(button.i18n ?: "backend.#{button.type}") }}
         </button>
     {% endfor %}

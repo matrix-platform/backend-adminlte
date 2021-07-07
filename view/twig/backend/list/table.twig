@@ -13,8 +13,8 @@
             {% if actions %}
                 <th class="w-1">{{ label('backend.operation') }}</th>
             {% endif %}
-            {% for switch in switches %}
-                <th class="w-1">{{ label("backend.#{switch.type}") }}</th>
+            {% for type in switches|keys %}
+                <th class="w-1">{{ label("backend.#{type}") }}</th>
             {% endfor %}
             {% for style in styles %}
                 <th>
@@ -53,27 +53,28 @@
                 {% endif %}
                 {% if actions %}
                     <td>
-                        {% for action in actions %}
-                            {% set button = cfg("backend.button-#{action.type}") %}
-                            {% set icon = cfg("backend.icon-#{action.type}") %}
-                            {% set title = i18n(action.i18n ?: "backend.#{action.type}") %}
-                            {% if action.method %}
-                                <button class="{{ button }}" data-ajax="{{ controller.node }}/{{ action.method }}/{{ data.id }}" title="{{ title }}">
-                                    <i class="{{ icon }}"></i>
-                                </button>
-                            {% else %}
-                                <a class="{{ button }}" data-ajax href="{{ build("#{controller.node}/#{data.id}", backward) }}" title="{{ title }}">
+                        {% for type, action in actions %}
+                            {% set button = cfg("backend.button-#{type}") %}
+                            {% set icon = cfg("backend.icon-#{type}") %}
+                            {% set title = i18n(action.i18n ?: "backend.#{type}") %}
+                            {% set href = include(template_from_string(action.path), data, false) %}
+                            {% if action.link %}
+                                <a class="{{ button }}" data-ajax href="{{ build(href, backward) }}" title="{{ title }}">
                                     <i class="{{ icon }}"></i>
                                 </a>
+                            {% else %}
+                                <button class="{{ button }}" data-ajax="{{ href }}" data-args="modal" title="{{ title }}">
+                                    <i class="{{ icon }}"></i>
+                                </button>
                             {% endif %}
                         {% endfor %}
                     </td>
                 {% endif %}
-                {% for switch in switches %}
+                {% for type, switch in switches %}
                     <td>
                         <div class="custom-control custom-switch">
-                            <input{% if data[".#{switch.type}"] %} checked{% endif %} class="custom-control-input" data-switch="{{ switch.type }}" id="{{ switch.type }}:{{ controller.node }}/{{ data.id }}" type="checkbox">
-                            <label class="custom-control-label" for="{{ switch.type }}:{{ controller.node }}/{{ data.id }}"></label>
+                            <input{% if data[".#{type}"] %} checked{% endif %} class="custom-control-input" data-switch="{{ type }}" id="{{ type }}:{{ controller.node }}/{{ data.id }}" type="checkbox">
+                            <label class="custom-control-label" for="{{ type }}:{{ controller.node }}/{{ data.id }}"></label>
                         </div>
                     </td>
                 {% endfor %}

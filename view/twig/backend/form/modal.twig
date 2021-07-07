@@ -29,10 +29,9 @@
                 </div>
                 <div class="justify-content-end modal-footer">
                     {% include 'backend/form/buttons.twig' with {
-                        buttons: result.buttons|sort((a, b) => a.ranking <=> b.ranking),
+                        buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
                         data: result.data,
-                        formId,
-                        path: result.path
+                        formId
                     } only %}
                 </div>
             </div>

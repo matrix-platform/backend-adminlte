@@ -1,7 +1,8 @@
 <div class="card">
     <div class="card-body p-1">
-        {% for item in controls %}
+        {% for type, item in controls %}
             {% with item %}
+                {% set path = include(template_from_string(path), form, false) %}
                 {% if least is not null %}
                     <button class="btn btn-app m-1" data-ajax="{{ build(path, parameters) }}" data-least="{{ least }}"{{ least ? ' disabled' }}>
                         <i class="{{ cfg("backend.icon-#{type}") }}"></i>
@@ -16,10 +17,18 @@
                         </button>
                     </span>
                 {% else %}
-                    <a class="btn btn-app m-1" data-ajax href="{{ build(path, backward) }}">
-                        <i class="{{ cfg("backend.icon-#{type}") }}"></i>
-                        {{ label(i18n ?: "backend.#{type}") }}
-                    </a>
+                    {% set href = build(path, parameters ? parameters|merge(backward) : backward) %}
+                    {% if link %}
+                        <a class="btn btn-app m-1" data-ajax href="{{ href }}">
+                            <i class="{{ cfg("backend.icon-#{type}") }}"></i>
+                            {{ label(i18n ?: "backend.#{type}") }}
+                        </a>
+                    {% else %}
+                        <button class="btn btn-app m-1" data-ajax="{{ href }}" data-args="modal">
+                            <i class="{{ cfg("backend.icon-#{type}") }}"></i>
+                            {{ label(i18n ?: "backend.#{type}") }}
+                        </button>
+                    {% endif %}
                 {% endif %}
             {% endwith %}
         {% endfor %}

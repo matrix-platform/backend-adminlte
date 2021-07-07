@@ -19,8 +19,9 @@
             {% endif %}
         {% endfor %}
         {% include 'backend/list/controls.twig' with {
-            controls: result.controls|sort((a, b) => a.ranking <=> b.ranking),
-            backward: result.backward
+            backward: result.backward,
+            controls: result.controls|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+            form
         } only %}
     {% endif %}
     {% if result.filters %}
@@ -57,7 +58,7 @@
             {% block content_body %}
                 <div class="card-body p-2">
                     {% include 'backend/list/table.twig' with {
-                        actions: result.actions|sort((a, b) => a.ranking <=> b.ranking),
+                        actions: result.actions|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
                         backward: result.backward,
                         controller,
                         formId,
@@ -69,14 +70,14 @@
                         selectable,
                         size: result.size,
                         styles: result.styles,
-                        switches: result.switches
+                        switches: result.switches|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking)
                     } only %}
                 </div>
                 {% if result.buttons %}
                     {% include 'backend/list/buttons.twig' with {
-                        buttons: result.buttons|sort((a, b) => a.ranking <=> b.ranking),
-                        formId,
-                        path: result.path
+                        buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                        form,
+                        formId
                     } only %}
                 {% endif %}
             {% endblock %}
