@@ -59,11 +59,11 @@
                             {% set title = i18n(action.i18n ?: "backend.#{type}") %}
                             {% set href = include(template_from_string(action.path), data, false) %}
                             {% if action.link %}
-                                <a class="{{ button }}" data-ajax href="{{ build(href, backward) }}" title="{{ title }}">
+                                <a class="{{ button }} rounded-0" data-ajax href="{{ build(href, backward) }}" title="{{ title }}">
                                     <i class="{{ icon }}"></i>
                                 </a>
                             {% else %}
-                                <button class="{{ button }}" data-ajax="{{ href }}" data-args="modal" title="{{ title }}">
+                                <button class="{{ button }} rounded-0" data-ajax="{{ href }}" data-args="modal" title="{{ title }}">
                                     <i class="{{ icon }}"></i>
                                 </button>
                             {% endif %}

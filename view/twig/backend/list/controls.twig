@@ -1,17 +1,17 @@
-<div class="card">
+<div class="card rounded-0">
     <div class="card-body p-1">
         {% for type, item in controls %}
             {% with item %}
                 {% set path = include(template_from_string(path), form, false) %}
                 {% if least is not null %}
-                    <button class="btn btn-app m-1" data-ajax="{{ build(path, parameters) }}" data-least="{{ least }}"{{ least ? ' disabled' }}>
+                    <button class="btn btn-app m-1 rounded-0" data-ajax="{{ build(path, parameters) }}" data-least="{{ least }}"{{ least ? ' disabled' }}>
                         <i class="{{ cfg("backend.icon-#{type}") }}"></i>
                         {{ label(i18n ?: "backend.#{type}") }}
                     </button>
                 {% elseif upload %}
                     <span>
                         <input class="d-none" data-ajax="{{ build(path, parameters) }}" type="file">
-                        <button class="btn btn-app m-1" data-upload>
+                        <button class="btn btn-app m-1 rounded-0" data-upload>
                             <i class="{{ cfg("backend.icon-#{type}") }}"></i>
                             {{ label(i18n ?: "backend.#{type}") }}
                         </button>
@@ -19,12 +19,12 @@
                 {% else %}
                     {% set href = build(path, parameters ? parameters|merge(backward) : backward) %}
                     {% if link %}
-                        <a class="btn btn-app m-1" data-ajax href="{{ href }}">
+                        <a class="btn btn-app m-1 rounded-0" data-ajax href="{{ href }}">
                             <i class="{{ cfg("backend.icon-#{type}") }}"></i>
                             {{ label(i18n ?: "backend.#{type}") }}
                         </a>
                     {% else %}
-                        <button class="btn btn-app m-1" data-ajax="{{ href }}" data-args="modal">
+                        <button class="btn btn-app m-1 rounded-0" data-ajax="{{ href }}" data-args="modal">
                             <i class="{{ cfg("backend.icon-#{type}") }}"></i>
                             {{ label(i18n ?: "backend.#{type}") }}
                         </button>

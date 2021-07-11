@@ -5,7 +5,7 @@
 {% block html %}
     <div class="modal">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h4 class="modal-title">{{ label('backend.confirm-delete') }}</h4>
                     <button class="close" data-dismiss="modal">
@@ -16,8 +16,8 @@
                     <p>{{ label('backend.confirm-delete-message') }}</p>
                 </div>
                 <div class="justify-content-between modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal">{{ label('backend.cancel') }}</button>
-                    <button class="{{ cfg('backend.button-delete') }}" data-submit>{{ i18n('backend.delete') }}</button>
+                    <button class="btn btn-default rounded-0" data-dismiss="modal">{{ label('backend.cancel') }}</button>
+                    <button class="{{ cfg('backend.button-delete') }} rounded-0" data-submit>{{ i18n('backend.delete') }}</button>
                 </div>
             </div>
         </div>

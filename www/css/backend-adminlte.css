@@ -55,9 +55,24 @@ th a, th:hover a {
     cursor: pointer;
 }
 
+.note-editor {
+    box-shadow: none;
+    border-radius: 0;
+}
+
 .qr-code img {
     display: block;
     margin: 0 auto;
+}
+
+.select2-container--bootstrap4 .select2-dropdown.select2-dropdown--below,
+.select2-container--bootstrap4 .select2-selection,
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+    border-radius: 0;
+}
+
+.select2-selection.select2-selection--multiple {
+    padding-top: 2px;
 }
 
 .select2-selection__choice__remove {

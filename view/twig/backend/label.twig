@@ -7,7 +7,7 @@
 {% block html %}
     <div class="modal">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h4 class="modal-title">{{ i18n('menu/common.label') }}</h4>
                     <button class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -16,17 +16,17 @@
                     <div id="_{{ formId }}">
                         <div class="form-group">
                             <label>{{ i18n('backend.label-name') }}</label>
-                            <input class="form-control" name="name" readonly type="text" value="{{ form.name }}">
+                            <input class="form-control rounded-0" name="name" readonly type="text" value="{{ form.name }}">
                         </div>
                         <div class="form-group">
                             <label>{{ i18n('backend.label-content') }}</label>
-                            <textarea class="form-control" name="content" rows="5">{{ i18n(form.name, '') }}</textarea>
+                            <textarea class="form-control rounded-0" name="content" rows="5">{{ i18n(form.name, '') }}</textarea>
                         </div>
                     </div>
                 </div>
                 <div class="justify-content-between modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal">{{ i18n('backend.cancel') }}</button>
-                    <button class="btn btn-info" data-ajax="label/update" data-form="#_{{ formId }}">{{ i18n('backend.save') }}</button>
+                    <button class="btn btn-default rounded-0" data-dismiss="modal">{{ i18n('backend.cancel') }}</button>
+                    <button class="btn btn-info rounded-0" data-ajax="label/update" data-form="#_{{ formId }}">{{ i18n('backend.save') }}</button>
                 </div>
             </div>
         </div>

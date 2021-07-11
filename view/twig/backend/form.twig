@@ -17,17 +17,17 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card card-outline card-outline-tabs card-primary">
+    <div class="card card-outline card-outline-tabs card-primary rounded-0">
         <div class="border-bottom-0 card-header p-0">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="active nav-link" data-toggle="tab" href="#tab-default">
+                    <a class="active nav-link rounded-0" data-toggle="tab" href="#tab-default">
                         {{ label('backend.tab-default') }}
                     </a>
                 </li>
                 {% for tab in tabs %}
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#tab-{{ tab }}">
+                        <a class="nav-link rounded-0" data-toggle="tab" href="#tab-{{ tab }}">
                             {{ label("backend.tab-#{tab}") }}
                         </a>
                     </li>

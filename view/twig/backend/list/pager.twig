@@ -28,8 +28,8 @@
     {% set page = page + diff %}
     {% set path = build(path, parameters, {p: page}) %}
     {% if diff %}
-        <li class="page-item"><a class="page-link px-2" data-ajax href="{{ path }}">{{ label|default(page)|raw }}</a></li>
+        <li class="page-item"><a class="page-link px-2 rounded-0" data-ajax href="{{ path }}">{{ label|default(page)|raw }}</a></li>
     {% else %}
-        <li class="active page-item"><a class="page-link px-2">{{ page }}</a></li>
+        <li class="active page-item"><a class="page-link px-2 rounded-0">{{ page }}</a></li>
     {% endif %}
 {% endmacro %}

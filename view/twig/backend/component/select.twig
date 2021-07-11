@@ -23,7 +23,7 @@
     {% if column.creation and column.association %}
         <div class="ml-1 operators">
             {% set path = column.creation is same as true ? column.association : column.creation %}
-            <button class="btn btn-default" data-ajax="{{ path }}/new" data-args="modal" title="{{ i18n('backend.new') }}">
+            <button class="btn btn-default rounded-0" data-ajax="{{ path }}/new" data-args="modal" title="{{ i18n('backend.new') }}">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
