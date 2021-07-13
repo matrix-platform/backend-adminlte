@@ -11,9 +11,14 @@ return [
 
     'icon-delete' => 'fas fa-trash-alt',
     'icon-export' => 'fas fa-file-export',
+    'icon-facebook' => 'fab fa-facebook',
+    'icon-instagram' => 'fab fa-instagram',
+    'icon-link' => 'fas fa-external-link-alt',
+    'icon-mail' => 'far fa-envelope',
     'icon-new' => 'fas fa-plus',
     'icon-search' => 'fas fa-search',
     'icon-view' => 'fas fa-edit',
+    'icon-youtube' => 'fab fa-youtube',
 
     'delete-confirmation' => 'backend/delete-confirmation.twig',
     'form' => 'backend/form.twig',

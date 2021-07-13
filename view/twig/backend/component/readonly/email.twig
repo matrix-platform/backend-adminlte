@@ -1,2 +1,10 @@
-{% set email = data[name] %}
-<div class="py-2">{% if email %}<a href="mailto:{{ email }}" target="_blank">{{ email }}</a>{% endif %}</div>
+{% set icon, email = column.useIcon, data[name] %}
+<div class="py-2">
+    {% if email %}
+        {% if icon %}
+            <a class="text-reset" href="mailto:{{ email }}"><i class="fa-2x {{ cfg("backend.icon-#{icon}") }}"></i></a>
+        {% else %}
+            <a href="mailto:{{ email }}">{{ email }}</a>
+        {% endif %}
+    {% endif %}
+</div>

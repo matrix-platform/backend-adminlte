@@ -1,10 +1,12 @@
 /www/adminlte/
-/www/css/app.css
+/www/css/attachment.css
+/www/css/backend-adminlte.css
 /www/css/img/
 /www/css/jquery.floatingscroll.css
 /www/css/label-editor.css
 /www/css/overlay.css
-/www/js/app.js
+/www/js/Sortable.min.js
+/www/js/backend-adminlte.js
 /www/js/jquery.floatingscroll.min.js
 /www/js/label-editor.js
 /www/js/matrix-token.js

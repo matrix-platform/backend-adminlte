@@ -1,7 +1,7 @@
 {% set multiple, values = column.multiple or search is defined, string(data[name])|split(',') %}
 <div class="d-flex">
     <div class="flex-grow-1">
-        <select class="form-control select2bs4 w-100" name="{{ name }}{{ suffix }}"
+        <select class="form-control select2bs4" name="{{ name }}{{ suffix }}"
 
             {%- if column.reaction %} data-reaction="{{ column.reaction }}"{% endif -%}
 

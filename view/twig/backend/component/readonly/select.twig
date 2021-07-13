@@ -1,1 +1,1 @@
-<div class="py-2">{{ string(data[name])|split(',')|map(value => column.options[value])|join(',') }}</div>
+<div class="py-2">{{ string(data[name])|split(',')|map(value => column.options[value])|join(',')|raw }}</div>

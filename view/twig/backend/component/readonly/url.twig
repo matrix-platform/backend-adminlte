@@ -1,2 +1,10 @@
-{% set url = data[name] %}
-<div class="py-2">{% if url %}<a href="{{ url }}" target="_blank">{{ url }}</a>{% endif %}</div>
+{% set icon, url = column.useIcon, data[name] %}
+<div class="py-2">
+    {% if url %}
+        {% if icon %}
+            <a class="text-reset" href="{{ url }}" target="_blank"><i class="fa-2x {{ cfg("backend.icon-#{icon}") }}"></i></a>
+        {% else %}
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        {% endif %}
+    {% endif %}
+</div>

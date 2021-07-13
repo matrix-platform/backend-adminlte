@@ -118,6 +118,12 @@
         }
     };
 
+    var complete = function (options) {
+        if (options.overlay !== false) {
+            setTimeout(overlay.hide);
+        }
+    };
+
     var destroy = function (target) {
         target.find("div.file-container, div.picture-container").each(function (ignore, element) {
             Sortable.get(element).destroy();
@@ -136,7 +142,15 @@
         }
 
         if ($.fn.summernote) {
-            target.find("textarea[data-format=html]").summernote("destroy");
+            target.find("textarea[data-format=html]").each(function (ignore, element) {
+                var editor = $(element);
+
+                if (editor.summernote("fullscreen.isFullscreen")) {
+                    editor.summernote("fullscreen.toggle");
+                }
+
+                editor.summernote("destroy");
+            });
         }
 
         if ($.fn.floatingScroll) {
@@ -188,8 +202,6 @@
         default:
             toastr.error(response.statusText);
         }
-
-        overlay.hide();
     };
 
     var execute = function (script) {
@@ -239,8 +251,10 @@
         return {parameters, url};
     };
 
-    var perform = function (path, parameters, options) {
-        overlay.show();
+    var perform = function (path, parameters, options = {}) {
+        if (options.overlay !== false) {
+            overlay.show();
+        }
 
         if (empty(path)) {
             path = settings.overview;
@@ -250,11 +264,14 @@
             parameters = serialize(parameters);
         }
 
-        if (options && options.parameters) {
+        if (options.parameters) {
             $.extend(parameters, options.parameters);
         }
 
         return $.ajax({
+            complete() {
+                complete(options);
+            },
             contentType: "application/json",
             data: JSON.stringify(parameters),
             error,
@@ -312,6 +329,7 @@
             if (response.message) {
                 toastr.info(response.message);
             }
+            $(".modal-wrapper .modal").modal("hide");
             redirect({path: response.path});
             break;
         case "refresh":
@@ -473,8 +491,6 @@
         } else {
             $("response", data).each(processXml);
         }
-
-        setTimeout(overlay.hide);
     };
 
     var toggleControls = function (checked) {
@@ -544,6 +560,10 @@
 
         form.find("input[data-format=attachment]").on("change", attachment);
 
+        form.find("textarea[rows]").each(function (ignore, element) {
+            element.style.height = (element.scrollHeight + 10) + "px";
+        });
+
         if ($.fn.select2) {
             form.find("select.select2bs4").each(function (ignore, element) {
                 var select = $(element);
@@ -553,7 +573,7 @@
                     options.minimumResultsForSearch = Infinity;
                 }
 
-                select.select2(options);
+                select.css("width", "100%").select2(options);
             }).filter("[data-search]").on("change", function (event) {
                 var select = $(event.currentTarget);
                 var inputs = select.closest("[id]").find("[data-name]");
@@ -754,10 +774,12 @@
 
         toggleControls(checked);
     }).delegate("input[data-switch][type=checkbox]", "change", function (event) {
-        var checkbox = $(event.currentTarget);
+        var checkbox = $(event.currentTarget).prop("disabled", true);
         var value = checkbox.prop("checked");
-        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}).fail(function () {
+        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}, {overlay: false}).fail(function () {
             checkbox.prop("checked", !value);
+        }).always(function () {
+            checkbox.prop("disabled", false);
         });
     }).delegate("select[data-reaction]", "change", function (event) {
         var parameters = {};
