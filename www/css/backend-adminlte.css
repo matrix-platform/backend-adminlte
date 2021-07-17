@@ -26,6 +26,19 @@ th a, th:hover a {
     background-image: url(img/redox-02.png);
 }
 
+.deploy-item {
+    height: 50px;
+    padding: 12px;
+}
+
+.deploy-item:not(:first-child) {
+    margin-top: -1px;
+}
+
+.deploy-item.sortable-ghost {
+    border: 3px solid var(--info) !important;
+}
+
 .daterangepicker select {
     vertical-align: middle;
 }
@@ -45,6 +58,14 @@ th a, th:hover a {
 
 .hint::selection {
     color: gray;
+}
+
+.modal-body {
+    overflow-y: auto;
+}
+
+.modal-content {
+    max-height: calc(100vh - 3.5rem);
 }
 
 .modal-wrapper .operators {

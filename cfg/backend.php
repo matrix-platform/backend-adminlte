@@ -10,6 +10,7 @@ return [
     'button-view' => 'btn btn-default',
 
     'icon-delete' => 'fas fa-trash-alt',
+    'icon-deploy' => 'fas fa-retweet',
     'icon-export' => 'fas fa-file-export',
     'icon-facebook' => 'fab fa-facebook',
     'icon-instagram' => 'fab fa-instagram',
@@ -21,6 +22,7 @@ return [
     'icon-youtube' => 'fab fa-youtube',
 
     'delete-confirmation' => 'backend/delete-confirmation.twig',
+    'deployment-modal' => 'backend/deployment-modal.twig',
     'form' => 'backend/form.twig',
     'form-modal' => 'backend/form/modal.twig',
     'index' => 'backend/index.twig',
