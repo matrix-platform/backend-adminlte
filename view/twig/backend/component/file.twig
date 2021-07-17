@@ -1,6 +1,6 @@
 {% set multiple, paths = column.multiple, data[name] ? data[name]|split(',') : [] %}
 <div>
-    <div class="{% if multiple %}file-container {% endif %}list-group rounded-0">
+    <div class="{% if multiple %}attachment-container file-container {% endif %}list-group rounded-0">
         {% for path in paths %}
             {% set info = file(path) %}
             <div class="attachment-wrapper file-wrapper list-group-item">

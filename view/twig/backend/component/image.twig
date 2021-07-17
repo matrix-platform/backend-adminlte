@@ -1,6 +1,6 @@
 {% set multiple, paths = column.multiple, data[name] ? data[name]|split(',') : [] %}
 <div>
-    <div class="{% if multiple %}picture-container{% else %}d-inline-block{% endif %}">
+    <div class="{% if multiple %}attachment-container picture-container{% else %}d-inline-block{% endif %}">
         {% for path in paths %}
             {% set href, info = path|img, file(path) %}
             <div class="attachment-wrapper picture-wrapper">

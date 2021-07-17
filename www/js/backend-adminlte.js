@@ -125,7 +125,7 @@
     };
 
     var destroy = function (target) {
-        target.find("div.file-container, div.picture-container").each(function (ignore, element) {
+        target.find("div.attachment-container").each(function (ignore, element) {
             Sortable.get(element).destroy();
         });
 
@@ -522,7 +522,7 @@
     };
 
     window.initForm = function (form) {
-        form.find("div.file-container, div.picture-container").each(sortable);
+        form.find("div.attachment-container").each(sortable);
 
         form.find("div[data-format=color]").each(function (ignore, element) {
             var target = $(element);

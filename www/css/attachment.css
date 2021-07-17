@@ -81,7 +81,7 @@
     font-size: 3rem !important;
 }
 
-.sortable-ghost {
+.attachment-container .sortable-ghost {
     border: 3px solid var(--info) !important;
     padding: 3px;
 }
