@@ -1,15 +1,22 @@
-<input class="form-control rounded-0" name="{{ name }}{{ suffix }}" type="{{ type }}"
+<div class="input-group">
+    <input class="form-control rounded-0" name="{{ name }}{{ suffix }}" type="{{ type }}"
 
-    {%- if autocomplete %} autocomplete="{{ autocomplete }}"{% endif -%}
+        {%- if autocomplete %} autocomplete="{{ autocomplete }}"{% endif -%}
 
-    {%- if format %} data-format="{{ format }}"{% endif -%}
+        {%- if format %} data-format="{{ format }}"{% endif -%}
 
-    {%- if pattern %} data-pattern="{{ pattern }}"{% endif -%}
+        {%- if pattern %} data-pattern="{{ pattern }}"{% endif -%}
 
-    {%- if disabled %} disabled{% endif -%}
+        {%- if disabled %} disabled{% endif -%}
 
-    {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
 
-    {%- if data[name] is not null %} value="{{ data[name] }}"{% endif -%}
+        {%- if data[name] is not null %} value="{{ data[name] }}"{% endif -%}
 
-/>
+    />
+    {% if unit %}
+        <span class="input-group-append">
+            <span class="input-group-text rounded-0">{{ label(unit) }}</span>
+        </span>
+    {% endif %}
+</div>
