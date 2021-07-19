@@ -1,0 +1,24 @@
+{% set values = data[name] is null ? [] : string(data[name])|split(',') %}
+<div class="p-1">
+    <div class="d-flex flex-wrap mb-3 options-checked px-2 py-1">
+        {% for value in values %}
+            <div class="border my-1 mr-1" data-input-value="{{ value }}">
+                <span>{{ column.options[value] }}</span>
+                <i class="fas fa-times-circle ml-2"></i>
+                <input name="{{ name }}{{ suffix }}" type="hidden" value="{{ value }}">
+            </div>
+        {% else %}
+            <input name="{{ name }}{{ suffix }}" type="hidden" value="">
+        {% endfor %}
+    </div>
+    <div class="d-flex flex-wrap options-unchecked" data-input-name="{{ name }}{{ suffix }}">
+        {% for key, item in column.options %}
+            {% if key not in values %}
+                <div class="border my-1 mr-1" data-input-value="{{ key }}">
+                    <span>{{ item }}</span>
+                    <i class="fas fa-times-circle ml-2"></i>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

@@ -81,6 +81,32 @@ th a, th:hover a {
     border-radius: 0;
 }
 
+.options-checked {
+    border: 2px dashed lightgray;
+    min-height: 60px;
+}
+
+.options-checked .sortable-ghost {
+    border: 3px solid var(--info) !important;
+    padding: 8px;
+}
+
+.options-unchecked {
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.options-unchecked > div > i {
+    display: none;
+}
+
+.options-checked > div, .options-unchecked > div {
+    background-color: white;
+    display: inline-block;
+    height: 40px;
+    line-height: 24px;
+    padding: 7px 10px;
+}
+
 .qr-code img {
     display: block;
     margin: 0 auto;

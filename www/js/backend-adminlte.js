@@ -125,7 +125,7 @@
     };
 
     var destroy = function (target) {
-        target.find("div.attachment-container").each(function (ignore, element) {
+        target.find("div.attachment-container, div.options-checked").each(function (ignore, element) {
             Sortable.get(element).destroy();
         });
 
@@ -475,7 +475,7 @@
 
     var settings = $.extend({overview: "overview"}, $("script:last").data());
 
-    var sortable = function (ignore, element) {
+    var sortableAttachment = function (ignore, element) {
         Sortable.create(element, {
             animation: 200,
             filter: "button",
@@ -483,6 +483,28 @@
                 return event.related.classList.contains("attachment-wrapper");
             }
         });
+    };
+
+    var sortableOptions = function (ignore, element) {
+        var unchecked = $(element);
+        var checked = unchecked.prev("div.options-checked");
+
+        unchecked.delegate("div", "click", function (event) {
+            var option = $(event.currentTarget);
+
+            option.append(`<input name="${unchecked.data("inputName")}" type="hidden" value="${option.data("inputValue")}">`);
+            option.appendTo(checked.children("input").remove().end());
+        });
+
+        checked.delegate("i", "click", function (event) {
+            $(event.currentTarget).parent().find("input").remove().end().appendTo(unchecked);
+
+            if (!checked.children().length) {
+                checked.append(`<input name="${unchecked.data("inputName")}" type="hidden" value="">`);
+            }
+        });
+
+        Sortable.create(checked[0], {animation: 150});
     };
 
     var success = function (data, parameters) {
@@ -522,7 +544,9 @@
     };
 
     window.initForm = function (form) {
-        form.find("div.attachment-container").each(sortable);
+        form.find("div.attachment-container").each(sortableAttachment);
+
+        form.find("div.options-unchecked").each(sortableOptions);
 
         form.find("div[data-format=color]").each(function (ignore, element) {
             var target = $(element);
