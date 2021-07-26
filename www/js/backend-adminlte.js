@@ -597,8 +597,26 @@
                     options.minimumResultsForSearch = Infinity;
                 }
 
-                select.css("width", "100%").select2(options);
-            }).filter("[data-search]").on("change", function (event) {
+                if (select.is("[data-cascade]") || select.is("[data-search]")) {
+                    options.dropdownAutoWidth = true;
+                } else {
+                    select.css("width", "100%");
+                }
+
+                select.select2(options);
+            }).filter("[data-cascade]").each(function (ignore, element) {
+                var select = $(element);
+                var target = $(`select[name="${select.data("cascade")}"]`);
+                var options = target.find("[data-parent-id]");
+
+                select.on("change", function () {
+                    var selected = target.val();
+                    var removed = options.prop("selected", false).filter(`[data-parent-id!="${select.val()}"]`).remove();
+
+                    options.not(removed).appendTo(target).filter(`[value="${selected}"]`).prop("selected", true);
+                    target.trigger("change");
+                }).change();
+            }).end().filter("[data-search]").on("change", function (event) {
                 var select = $(event.currentTarget);
                 var inputs = select.closest("[id]").find("[data-name]");
 

@@ -1,7 +1,7 @@
 <div class="mt-2">
     <div class="d-flex" id="_{{ formId }}_filter">
         <div class="mr-1">
-            <select class="form-control select2bs4" data-search style="min-width:10rem;">
+            <select class="form-control select2bs4" data-search>
                 {% for style in filters %}
                     <option value="{{ style.name }}"{{ style.selected ? ' selected' }}>
                         {{- i18n(style.column.i18n ?: style.i18n) -}}

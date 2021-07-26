@@ -1,5 +1,18 @@
 {% set multiple, values = column.multiple or search is defined, string(data[name])|split(',') %}
 <div class="d-flex">
+    {% if not multiple and column.cascade %}
+        {% set key, parent_id = column.cascade.target.name, column.options[data[name]].parent_id %}
+        <div class="mr-1">
+            <select class="form-control select2bs4" data-cascade="{{ name }}{{ suffix }}" data-searchable {%- if disabled %} disabled{% endif -%}>
+                {% if not required or values is null %}
+                    <option value="">&nbsp;</option>
+                {% endif %}
+                {% for item in column.cascade.foreign.model.query() %}
+                    <option{% if item[key] == parent_id %} selected{% endif %} value="{{ item[key] }}">{{ item.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
     <div class="flex-grow-1">
         <select class="form-control select2bs4" name="{{ name }}{{ suffix }}"
 
@@ -16,7 +29,13 @@
                 {% if not multiple %}<option value="">&nbsp;</option>{% endif %}
             {% endif %}
             {% for key, item in column.options %}
-                <option{% if key in values %} selected{% endif %} value="{{ key }}">{{ item }}</option>
+                <option value="{{ key }}"
+
+                    {%- if item.parent_id %} data-parent-id="{{ item.parent_id }}"{% endif -%}
+
+                    {%- if key in values %} selected{% endif -%}
+
+                >{{ item.title }}</option>
             {% endfor %}
         </select>
     </div>
