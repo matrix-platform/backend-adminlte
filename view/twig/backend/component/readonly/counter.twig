@@ -1,5 +1,10 @@
 {% if data[name] is defined %}
-    <a data-ajax href="{{ controller.node|trim('/') }}/{{ data[column.relation.column.name] }}/{{ column.alias }}">
+    {% if column.href %}
+        {% set href = include(template_from_string(column.href), data, false) %}
+    {% else %}
+        {% set href = "#{controller.node|trim('/')}/#{data[column.relation.column.name]}/#{column.alias}" %}
+    {% endif %}
+    <a data-ajax href="{{ href }}">
         {{ data[name] }}
     </a>
 {% else %}

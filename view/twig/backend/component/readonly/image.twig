@@ -1,5 +1,9 @@
 <div class="d-flex flex-wrap">
-    {% for path in data[name] ? data[name]|split(',') : [] %}
+    {% set paths = data[name] ? data[name]|split(',') : [] %}
+    {% if paths and not multiple %}
+        {% set paths = paths[0:1] %}
+    {% endif %}
+    {% for path in paths %}
         {% set href, info = path|img, file(path) %}
         <div class="p-1">
             <div class="picture-wrapper">

@@ -1,7 +1,15 @@
 <div class="input-group" data-format="color">
-    {% include 'backend/component/input.twig' with {autocomplete: 'off', type: 'text'} %}
+    <input autocomplete="off" class="form-control rounded-0" name="{{ name }}{{ suffix }}" type="text"
+
+        {%- if disabled %} disabled{% endif -%}
+
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+
+        {%- if data[name] is not null %} value="{{ data[name] }}"{% endif -%}
+
+    />
     <div class="color-picker input-group-append">
-        <span class="input-group-text">
+        <span class="input-group-text rounded-0">
             &nbsp;&nbsp;&nbsp;
         </span>
     </div>

@@ -118,10 +118,6 @@ th a, th:hover a {
     border-radius: 0;
 }
 
-.select2-selection.select2-selection--multiple {
-    padding-top: 2px;
-}
-
 .select2-selection__choice__remove {
     margin-top: -1px;
 }
