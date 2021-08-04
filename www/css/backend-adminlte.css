@@ -27,6 +27,7 @@ th a, th:hover a {
 }
 
 .deploy-item {
+    background-color: white;
     height: 50px;
     padding: 12px;
 }
