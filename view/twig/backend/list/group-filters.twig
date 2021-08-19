@@ -1,9 +1,9 @@
 <div class="mt-2">
     <div class="btn-group mr-1">
-        <button type="button" class="btn btn-default rounded-0">
+        <button type="button" class="btn btn-default btn-flat">
             {{ label("options/list-group.#{form.g ?: 0}") }}
         </button>
-        <button type="button" class="btn btn-default dropdown-icon dropdown-toggle rounded-0" data-toggle="dropdown"></button>
+        <button type="button" class="btn btn-default btn-flat dropdown-icon dropdown-toggle" data-toggle="dropdown"></button>
         <div class="dropdown-menu rounded-0">
             {% for group in groups %}
                 <a class="dropdown-item" data-ajax href="{{ build(path, parameters, {g: group ?: null}) }}">

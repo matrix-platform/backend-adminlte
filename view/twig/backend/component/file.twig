@@ -8,10 +8,10 @@
                     {{ info.name }}
                 </a>
                 <div class="btn-group">
-                    <button class="btn btn-default border-0 rounded-0" data-ajax="file-info/{{ info.id }}" data-args="modal">
+                    <button class="btn btn-default btn-flat border-0" data-ajax="file-info/{{ info.id }}" data-args="modal">
                         <i class="fas fa-info"></i>
                     </button>
-                    <button class="btn btn-default border-0 rounded-0" {% if disabled %}disabled{% else %}data-remove-attachment{% endif %}>
+                    <button class="btn btn-default btn-flat border-0" {% if disabled %}disabled{% else %}data-remove-attachment{% endif %}>
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
@@ -20,7 +20,7 @@
             </div>
         {% endfor %}
         {% if not disabled or not paths %}
-            <button class="attachment-picker file-picker btn btn-default{% if paths and not multiple %} d-none{% endif %} rounded-0" data-name="{{ name }}" data-suffix="{{ suffix }}"{% if disabled %} disabled{% endif %}>
+            <button class="attachment-picker btn btn-default btn-flat{% if paths and not multiple %} d-none{% endif %} file-picker" data-name="{{ name }}" data-suffix="{{ suffix }}"{% if disabled %} disabled{% endif %}>
                 <i class="fas fa-plus"></i>
             </button>
             {% if not disabled %}

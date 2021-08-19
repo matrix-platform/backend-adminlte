@@ -2,12 +2,12 @@
 
 return [
 
-    'button-delete' => 'btn btn-danger',
-    'button-insert' => 'btn btn-info',
-    'button-next' => 'btn btn-info',
-    'button-search' => 'btn btn-default',
-    'button-update' => 'btn btn-info',
-    'button-view' => 'btn btn-default',
+    'button-delete' => 'btn-danger',
+    'button-insert' => 'btn-info',
+    'button-next' => 'btn-info',
+    'button-search' => 'btn-default',
+    'button-update' => 'btn-info',
+    'button-view' => 'btn-default',
 
     'icon-delete' => 'fas fa-trash-alt',
     'icon-deploy' => 'fas fa-retweet',
