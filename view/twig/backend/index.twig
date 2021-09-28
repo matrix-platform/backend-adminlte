@@ -1,4 +1,4 @@
-{% set language, languages, prefix = constant('LANGUAGE'), cfg('system.languages')|split('|'), constant('APP_PATH') %}
+{% set editor, language, languages, prefix = cfg('backend.editor'), constant('LANGUAGE'), cfg('system.languages')|split('|'), constant('APP_PATH') %}
 <!DOCTYPE HTML>
 <html lang="{{ i18n('locale.browser') }}">
     <head>
@@ -16,7 +16,9 @@
         <link href="{{ prefix }}adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet">
         <link href="{{ prefix }}adminlte/plugins/select2/css/select2.min.css" rel="stylesheet">
         <link href="{{ prefix }}adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet">
+{% if editor == 'summernote' %}
         <link href="{{ prefix }}adminlte/plugins/summernote/summernote-bs4.css" rel="stylesheet">
+{% endif %}
         <link href="{{ prefix }}adminlte/plugins/toastr/toastr.min.css" rel="stylesheet">
         <link href="{{ prefix }}css/jquery.floatingscroll.css" rel="stylesheet">
         <link href="{{ prefix }}css/backend-adminlte.css" rel="stylesheet">
@@ -94,6 +96,10 @@
         <script src="{{ prefix }}adminlte/plugins/jquery/jquery.min.js"></script>
         <script src="{{ prefix }}adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="{{ prefix }}adminlte/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+{% if editor == 'ckeditor' %}
+        <script src="{{ prefix }}js/ckeditor/ckeditor.js"></script>
+        <script src="{{ prefix }}js/ckeditor/adapters/jquery.js"></script>
+{% endif %}
         <script src="{{ prefix }}adminlte/plugins/moment/moment.min.js"></script>
         {% if language != 'en' %}
             <script src="{{ prefix }}adminlte/plugins/moment/locale/{{ i18n('locale.moment') }}.js"></script>
@@ -101,7 +107,9 @@
         <script src="{{ prefix }}adminlte/plugins/daterangepicker/daterangepicker.js"></script>
         <script src="{{ prefix }}adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
         <script src="{{ prefix }}adminlte/plugins/select2/js/select2.full.min.js"></script>
+{% if editor == 'summernote' %}
         <script src="{{ prefix }}adminlte/plugins/summernote/summernote-bs4.min.js"></script>
+{% endif %}
         <script src="{{ prefix }}adminlte/plugins/toastr/toastr.min.js"></script>
         <script src="{{ prefix }}adminlte/dist/js/adminlte.min.js"></script>
         <script src="{{ prefix }}js/jquery.floatingscroll.min.js"></script>

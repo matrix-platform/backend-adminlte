@@ -8,6 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "almasaeed2010/adminlte": "^3.1"
+        "almasaeed2010/adminlte": "^3.1",
+        "ckeditor/ckeditor": "^4.16"
     }
 }

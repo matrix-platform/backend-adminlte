@@ -2,6 +2,8 @@
 
 return [
 
+    'editor' => 'ckeditor',
+
     'button-delete' => 'btn-danger',
     'button-insert' => 'btn-info',
     'button-next' => 'btn-info',

@@ -157,6 +157,12 @@
             target.find(".table-responsive").floatingScroll("destroy");
         }
 
+        if (window.CKEDITOR) {
+            target.find("textarea[data-format=html]").each(function (ignore, element) {
+                $(element).ckeditorGet().destroy();
+            });
+        }
+
         target.hide().empty();
     };
 
@@ -435,7 +441,7 @@
 
                 case "textarea":
                     input = $(element);
-                    if (input.is("[data-format=html]") && input.summernote("isEmpty")) {
+                    if ($.fn.summernote && input.is("[data-format=html]") && input.summernote("isEmpty")) {
                         combine(data, element.name, null);
                     } else {
                         combine(data, element.name, input.val());
@@ -664,9 +670,29 @@
                 }
             });
         }
+
+        if (window.CKEDITOR) {
+            var href = document.baseURI.match(/^(.*)(backend\/)$/);
+
+            form.find("textarea[data-format=html]").each(function (ignore, element) {
+                var editor = $(element);
+
+                editor.ckeditor({
+                    allowedContent: true,
+                    baseHref: href[1],
+                    bodyClass: "ckeditor-body",
+                    contentsCss: "css/ckeditor.css",
+                    enterMode: window.CKEDITOR.ENTER_BR,
+                    filebrowserImageUploadUrl: "file/upload-file",
+                    shiftEnterMode: window.CKEDITOR.ENTER_P,
+                    uploadUrl: "file/upload-file"
+                });
+            });
+        }
     };
 
     window.onpopstate = function (event) {
+        $("a.cke_button__maximize.cke_button_on").click();
         $(".ekko-lightbox, .modal-wrapper .modal").modal("hide");
 
         perform(event.state.path, {});
