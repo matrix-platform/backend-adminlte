@@ -2,6 +2,8 @@
 
     {%- if disabled %} data-disabled{% endif -%}
 
+    {%- if editorClass %} data-editor-class="{{ editorClass }}"{% endif -%}
+
     {%- if placeholder %} data-placeholder="{{ placeholder }}"{% endif -%}
 
 >{{ data[name] }}</textarea>

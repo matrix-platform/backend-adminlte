@@ -672,15 +672,13 @@
         }
 
         if (window.CKEDITOR) {
-            var href = document.baseURI.match(/^(.*)(backend\/)$/);
-
             form.find("textarea[data-format=html]").each(function (ignore, element) {
                 var editor = $(element);
 
                 editor.ckeditor({
                     allowedContent: true,
-                    baseHref: href[1],
-                    bodyClass: "ckeditor-body",
+                    baseHref: document.baseURI.match(/^(.*)(backend\/)$/)[1],
+                    bodyClass: editor.data("editorClass") || "ckeditor-body",
                     contentsCss: "css/ckeditor.css",
                     enterMode: window.CKEDITOR.ENTER_BR,
                     filebrowserImageUploadUrl: "file/upload-file",
