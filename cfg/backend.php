@@ -4,6 +4,7 @@ return [
 
     'editor' => 'ckeditor',
 
+    'button-clone' => 'btn-default',
     'button-delete' => 'btn-danger',
     'button-insert' => 'btn-info',
     'button-next' => 'btn-info',
@@ -11,6 +12,7 @@ return [
     'button-update' => 'btn-info',
     'button-view' => 'btn-default',
 
+    'icon-clone' => 'far fa-clone',
     'icon-delete' => 'fas fa-trash-alt',
     'icon-deploy' => 'fas fa-retweet',
     'icon-export' => 'fas fa-file-export',
@@ -20,7 +22,7 @@ return [
     'icon-mail' => 'far fa-envelope',
     'icon-new' => 'fas fa-plus',
     'icon-search' => 'fas fa-search',
-    'icon-view' => 'fas fa-edit',
+    'icon-view' => 'fas fa-pen',
     'icon-youtube' => 'fab fa-youtube',
 
     'delete-confirmation' => 'backend/delete-confirmation.twig',
