@@ -1,0 +1,12 @@
+{% set pattern, target = column.pattern|replace({H: 'HH', i: 'mm', s: 'ss'}), random() %}
+<div data-format="time" data-pattern="{{ pattern }}" data-target-input="nearest" id="{{ target }}-timepicker">
+    <input autocomplete="off" class="datetimepicker-input form-control rounded-0" data-target="#{{ target }}-timepicker" data-toggle="datetimepicker" name="{{ name }}{{ suffix }}" type="text"
+
+        {%- if disabled %} disabled{% endif -%}
+
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+
+        {%- if data[name] is not null %} value="{{ data[name] }}"{% endif -%}
+
+    />
+</div>

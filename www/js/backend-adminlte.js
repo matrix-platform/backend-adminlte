@@ -133,6 +133,10 @@
             $(element).data("colorpicker").destroy();
         });
 
+        target.find("div[data-format=time]").each(function (ignore, element) {
+            $(element).datetimepicker("destroy");
+        });
+
         target.find("input[data-format=date],input[data-format=datetime]").each(function (ignore, element) {
             $(element).data("daterangepicker").remove();
         });
@@ -570,6 +574,14 @@
             });
 
             output.css("background-color", input.val());
+        });
+
+        form.find("div[data-format=time]").each(function (ignore, element) {
+            var target = $(element);
+
+            target.datetimepicker({
+                format: target.data("pattern")
+            });
         });
 
         form.find("input[data-format=date],input[data-format=datetime]").each(function (ignore, element) {
