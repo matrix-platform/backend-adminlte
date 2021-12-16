@@ -5,7 +5,7 @@
             {% set href, info = path|img, file(path) %}
             <div class="attachment-wrapper picture-wrapper">
                 <div class="picture-preview">
-                    <a data-toggle="lightbox" href="{{ href }}" title="{{ info.description }}">
+                    <a data-toggle="lightbox" data-type="image" href="{{ href }}" title="{{ info.description }}">
                         <img alt="{{ info.name }}" src="{{ href }}">
                     </a>
                 </div>
