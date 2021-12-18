@@ -14,6 +14,7 @@
                     </label>
                     <span class="invalid-feedback" data-name="{{ local }}"></span>
                     {% if superuser %}<span class="hint">{{ local }}</span>{% endif %}
+                    {% if data[local] is not defined %}{% set data = data|merge({(local): data[style.name]}) %}{% endif %}
                     {% include 'backend/component.twig' with {controller, data, style: style|merge({name: local})} only %}
                     <span class="text-secondary text-xs">{{ label(column.remark ?: "#{style.i18n}.remark", '') }}</span>
                 </div>
