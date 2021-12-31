@@ -1,4 +1,4 @@
-/*global $,Blob,Sortable,atob,btoa,history,toastr*/
+/*global $,Blob,Sortable,atob,btoa,google,history,toastr*/
 /*jslint browser,long*/
 
 (function () {
@@ -124,6 +124,29 @@
         }
     };
 
+    var createMap = function (container, center) {
+        var latitude = $(`input[name="${container.data("latitude")}"]`);
+        var longitude = $(`input[name="${container.data("longitude")}"]`);
+        var map;
+        var marker;
+
+        if (!center) {
+            center = new google.maps.LatLng(settings.latitude, settings.longitude);
+        }
+
+        map = new google.maps.Map(container[0], {center, zoom: settings.map_zoom});
+        marker = new google.maps.Marker({draggable: !container.data("disabled"), map, position: center});
+
+        marker.addListener("position_changed", function () {
+            var position = marker.getPosition();
+
+            latitude.val(position.lat());
+            longitude.val(position.lng());
+        });
+
+        container.data("map", map).data("marker", marker).data("service", new google.maps.places.PlacesService(map));
+    };
+
     var destroy = function (target) {
         target.find("div.attachment-container, div.options-checked").each(function (ignore, element) {
             Sortable.get(element).destroy();
@@ -216,6 +239,26 @@
 
     var execute = function (script) {
         $.globalEval("(function () {" + script + "}());");
+    };
+
+    var initMap = function (ignore, element) {
+        var container = $(element);
+        var lat = $(`input[name="${container.data("latitude")}"]`).val();
+        var lng = $(`input[name="${container.data("longitude")}"]`).val();
+
+        if (!lat || !lng) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (result) {
+                    createMap(container, new google.maps.LatLng(result.coords.latitude, result.coords.longitude));
+                }, function () {
+                    createMap(container);
+                });
+            } else {
+                createMap(container);
+            }
+        } else {
+            createMap(container, new google.maps.LatLng(lat, lng));
+        }
     };
 
     var overlay = (function () {
@@ -483,7 +526,12 @@
         return data;
     };
 
-    var settings = $.extend({overview: "overview"}, $("script:last").data());
+    var settings = $.extend({
+        latitude: 24.1736774,
+        longitude: 120.6686102,
+        map_zoom: 16,
+        overview: "overview"
+    }, $("script:last").data());
 
     var sortableAttachment = function (ignore, element) {
         Sortable.create(element, {
@@ -555,6 +603,8 @@
 
     window.initForm = function (form) {
         form.find("div.attachment-container").each(sortableAttachment);
+
+        form.find("div.google-map").each(initMap);
 
         form.find("div.options-unchecked").each(sortableOptions);
 
@@ -866,6 +916,36 @@
         perform(select.data("reaction"), parameters);
     }).delegate("select[name=p]", "change", function (event) {
         redirect({path: build(history.state.path, {p: $(event.currentTarget).val()})});
+    }).delegate("span.search-place", "click", function (event) {
+        var container;
+        var input = $(event.currentTarget).parent().siblings("input");
+        var matches;
+        var position;
+        var query = input.val().trim();
+
+        if (query) {
+            container = input.parent().siblings("div.google-map");
+
+            if (container.data("map")) {
+                matches = query.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
+
+                if (matches) {
+                    position = new google.maps.LatLng(matches[1], matches[2]);
+
+                    container.data("map").setCenter(position);
+                    container.data("marker").setPosition(position);
+                } else {
+                    container.data("service").findPlaceFromQuery({fields: ["geometry"], query}, function (results, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK && results.length) {
+                            position = results[0].geometry.location;
+
+                            container.data("map").setCenter(position);
+                            container.data("marker").setPosition(position);
+                        }
+                    });
+                }
+            }
+        }
     }).ready(function () {
         $("ul[data-widget=treeview]").on("collapsed.lte.treeview expanded.lte.treeview", saveMenu);
 

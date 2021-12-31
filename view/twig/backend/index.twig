@@ -1,4 +1,4 @@
-{% set editor, language, languages, prefix = cfg('backend.editor'), constant('LANGUAGE'), cfg('system.languages')|split('|'), constant('APP_PATH') %}
+{% set editor, language, languages, map_key, prefix = cfg('backend.editor'), constant('LANGUAGE'), cfg('system.languages')|split('|'), cfg('system.google-map-api-key'), constant('APP_PATH') %}
 <!DOCTYPE HTML>
 <html lang="{{ i18n('locale.browser') }}">
     <head>
@@ -34,23 +34,23 @@
                     </li>
                 </ul>
                 <ul class="ml-auto navbar-nav">
-                    {% if languages|length > 1 %}
-                        <li class="dropdown nav-item">
-                            <a class="nav-link" data-toggle="dropdown">
-                                <i class="fas fa-globe"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right rounded-0">
-                                {% for lang in languages %}
-                                    {% if loop.index0 %}
-                                        <div class="dropdown-divider"></div>
-                                    {% endif %}
-                                    <button class="dropdown-item" data-language data-path="{{ prefix }}{{ lang }}/backend/">
-                                        {{ cfg('i18n/' ~ lang ~ '.title') }}
-                                    </button>
-                                {% endfor %}
-                            </div>
-                        </li>
-                    {% endif %}
+{% if languages|length > 1 %}
+                    <li class="dropdown nav-item">
+                        <a class="nav-link" data-toggle="dropdown">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right rounded-0">
+{% for lang in languages %}
+{% if loop.index0 %}
+                            <div class="dropdown-divider"></div>
+{% endif %}
+                            <button class="dropdown-item" data-language data-path="{{ prefix }}{{ lang }}/backend/">
+                                {{ cfg("i18n/#{lang}.title") }}
+                            </button>
+{% endfor %}
+                        </div>
+                    </li>
+{% endif %}
                     <li class="dropdown nav-item">
                         <a class="nav-link" data-toggle="dropdown">
                             <i class="fas fa-user-cog"></i>
@@ -102,9 +102,9 @@
         <script src="{{ prefix }}js/ckeditor/adapters/jquery.js"></script>
 {% endif %}
         <script src="{{ prefix }}adminlte/plugins/moment/moment.min.js"></script>
-        {% if language != 'en' %}
-            <script src="{{ prefix }}adminlte/plugins/moment/locale/{{ i18n('locale.moment') }}.js"></script>
-        {% endif %}
+{% if language != 'en' %}
+        <script src="{{ prefix }}adminlte/plugins/moment/locale/{{ i18n('locale.moment') }}.js"></script>
+{% endif %}
         <script src="{{ prefix }}adminlte/plugins/daterangepicker/daterangepicker.js"></script>
         <script src="{{ prefix }}adminlte/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
         <script src="{{ prefix }}adminlte/plugins/select2/js/select2.full.min.js"></script>
@@ -116,6 +116,9 @@
         <script src="{{ prefix }}adminlte/dist/js/adminlte.min.js"></script>
         <script src="{{ prefix }}js/jquery.floatingscroll.min.js"></script>
         <script src="{{ prefix }}js/Sortable.min.js"></script>
+{% if map_key %}
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ map_key }}&libraries=places"></script>
+{% endif %}
         <script src="{{ prefix }}js/label-editor.js"></script>
         <script src="{{ prefix }}js/matrix-token.js"></script>
         <script data-language="{{ language }}" data-path="{{ controller.args()|join('/') }}" src="{{ prefix }}js/backend-adminlte.js"></script>

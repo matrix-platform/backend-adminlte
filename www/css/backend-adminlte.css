@@ -52,6 +52,23 @@ th a, th:hover a {
     margin-bottom: 56px;
 }
 
+.google-map {
+    height: 500px;
+    position: relative;
+}
+
+.google-map .overlay {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .hint {
     color: transparent;
     cursor: default;

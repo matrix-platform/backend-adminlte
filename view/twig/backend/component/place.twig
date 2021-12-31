@@ -1,0 +1,22 @@
+{% set latitude, longitude = column.latitude|default('latitude'), column.longitude|default('longitude') %}
+<div class="input-group">
+    <input class="form-control rounded-0" name="{{ name }}" type="text"
+
+        {%- if disabled %} disabled{% endif -%}
+
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+
+        {%- if data[name] is not null %} value="{{ data[name] }}"{% endif -%}
+
+    />
+    <span class="input-group-append">
+        <span class="input-group-text rounded-0 search-place" role="button">
+            <i class="fas fa-search"></i>
+        </span>
+    </span>
+</div>
+<div class="border google-map mt-2" data-disabled="{{ disabled }}" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}">
+    <div class="overlay"><i class="fas fa-5x fa-circle-notch fa-spin text-light"></i></div>
+</div>
+<input name="{{ latitude }}" type="hidden" value="{{ data[latitude] }}"/>
+<input name="{{ longitude }}" type="hidden" value="{{ data[longitude] }}"/>
