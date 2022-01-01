@@ -1,3 +1,8 @@
+.attachment-picker.highlight {
+    border-color: palegreen;
+    border-width: 5px;
+}
+
 .file-wrapper {
     align-items: center;
     display: flex;

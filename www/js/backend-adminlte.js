@@ -5,69 +5,74 @@
 
     "use strict";
 
+    var appendAttachment = function (picker, files) {
+        var multiple = picker.siblings("[type=file]").val("").is("[multiple]");
+        var name = picker.data("name");
+        var suffix = picker.data("suffix");
+
+        if (!multiple && files.length > 1) {
+            files = [files[0]];
+        }
+
+        $.each(files, function (ignore, file) {
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var filename = file.name.replace(/"/g, "&quot;");
+
+                overlay.hide();
+
+                if (picker.hasClass("picture-picker")) {
+                    picker.before([
+                        `<div class="attachment-wrapper picture-wrapper rounded">`,
+                        `<div class="picture-preview">`,
+                        `<a data-toggle="lightbox" href="${reader.result}"><img alt="${filename}" src="${reader.result}"></a>`,
+                        `</div>`,
+                        `<div class="picture-controller">`,
+                        `<div class="btn-group w-100">`,
+                        `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-cloud-download-alt"></i></button>`,
+                        `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
+                        `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
+                        `</div>`,
+                        `</div>`,
+                        `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
+                        `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
+                        `</div>`
+                    ].join(""));
+                } else {
+                    picker.before([
+                        `<div class="attachment-wrapper file-wrapper list-group-item">`,
+                        `<a download="${filename}" href="${reader.result}">`,
+                        filename.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+                        `</a>`,
+                        `<div class="btn-group">`,
+                        `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
+                        `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
+                        `</div>`,
+                        `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
+                        `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
+                        `</div>`
+                    ].join(""));
+                }
+            };
+
+            reader.readAsDataURL(file);
+
+            overlay.show();
+        });
+
+        picker.siblings("input[type=hidden]").remove();
+
+        if (!multiple) {
+            picker.addClass("d-none");
+        }
+    };
+
     var attachment = function (event) {
         var files = event.currentTarget.files;
-        var name;
-        var picker;
-        var suffix;
 
         if (files && files.length) {
-            picker = $(event.currentTarget).siblings(".attachment-picker");
-            name = picker.data("name");
-            suffix = picker.data("suffix");
-
-            $.each(files, function (ignore, file) {
-                var reader = new FileReader();
-
-                reader.onload = function () {
-                    var filename = file.name.replace(/"/g, "&quot;");
-
-                    overlay.hide();
-
-                    if (picker.hasClass("picture-picker")) {
-                        picker.before([
-                            `<div class="attachment-wrapper picture-wrapper rounded">`,
-                            `<div class="picture-preview">`,
-                            `<a data-toggle="lightbox" href="${reader.result}"><img alt="${filename}" src="${reader.result}"></a>`,
-                            `</div>`,
-                            `<div class="picture-controller">`,
-                            `<div class="btn-group w-100">`,
-                            `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-cloud-download-alt"></i></button>`,
-                            `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
-                            `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
-                            `</div>`,
-                            `</div>`,
-                            `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
-                            `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
-                            `</div>`
-                        ].join(""));
-                    } else {
-                        picker.before([
-                            `<div class="attachment-wrapper file-wrapper list-group-item">`,
-                            `<a download="${filename}" href="${reader.result}">`,
-                            filename.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
-                            `</a>`,
-                            `<div class="btn-group">`,
-                            `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
-                            `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
-                            `</div>`,
-                            `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
-                            `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
-                            `</div>`
-                        ].join(""));
-                    }
-                };
-
-                reader.readAsDataURL(file);
-
-                overlay.show();
-            });
-
-            picker.siblings("input[type=hidden]").remove();
-
-            if (!picker.siblings("[type=file]").val("").is("[multiple]")) {
-                picker.addClass("d-none");
-            }
+            appendAttachment($(event.currentTarget).siblings(".attachment-picker"), files);
         }
     };
 
@@ -653,7 +658,9 @@
         form.find("input[data-format=attachment]").on("change", attachment);
 
         form.find("textarea[rows]").each(function (ignore, element) {
-            element.style.height = (element.scrollHeight + 10) + "px";
+            if (element.scrollHeight) {
+                element.style.height = (element.scrollHeight + 10) + "px";
+            }
         });
 
         if ($.fn.select2) {
@@ -803,6 +810,35 @@
         return false;
     }).delegate("button.attachment-picker", "click", function (event) {
         $(event.currentTarget).siblings("input[type=file]").click();
+    }).delegate("button.attachment-picker", "dragenter dragover", function (event) {
+        $(event.currentTarget).addClass("highlight");
+
+        return false;
+    }).delegate("button.attachment-picker", "dragleave", function (event) {
+        $(event.currentTarget).removeClass("highlight");
+
+        return false;
+    }).delegate("button.attachment-picker", "drop", function (event) {
+        var files;
+        var picker = $(event.currentTarget).removeClass("highlight");
+
+        if (picker.hasClass("picture-picker")) {
+            files = [];
+
+            $.each(event.originalEvent.dataTransfer.files, function (ignore, file) {
+                if (file.type.startsWith("image/")) {
+                    files.push(file);
+                }
+            });
+        } else {
+            files = event.originalEvent.dataTransfer.files;
+        }
+
+        if (files.length) {
+            appendAttachment(picker, files);
+        }
+
+        return false;
     }).delegate("button[data-ajax]", "click", function (event) {
         var button = $(event.currentTarget);
         var form = button.data("form");
