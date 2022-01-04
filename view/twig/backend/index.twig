@@ -117,7 +117,7 @@
         <script src="{{ prefix }}js/jquery.floatingscroll.min.js"></script>
         <script src="{{ prefix }}js/Sortable.min.js"></script>
 {% if map_key %}
-        <script src="https://maps.googleapis.com/maps/api/js?key={{ map_key }}&libraries=places"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?language={{ i18n('locale.google-map') }}&libraries=places&key={{ map_key }}"></script>
 {% endif %}
         <script src="{{ prefix }}js/label-editor.js"></script>
         <script src="{{ prefix }}js/matrix-token.js"></script>
