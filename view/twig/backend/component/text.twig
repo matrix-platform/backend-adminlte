@@ -1,1 +1,4 @@
-{% include 'backend/component/input.twig' with {type: 'text'} %}
+{% include 'backend/component/input.twig' with {
+    type: 'text',
+    value: data[name]
+} %}
