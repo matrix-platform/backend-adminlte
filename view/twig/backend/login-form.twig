@@ -45,7 +45,7 @@
         <script src="adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="adminlte/plugins/toastr/toastr.min.js"></script>
         <script src="adminlte/dist/js/adminlte.min.js"></script>
-        <script src="js/matrix-token.js"></script>
+        <script src="js/{{ cfg('system.csrf-token-type') }}-token.js"></script>
         <script>
             $("form").submit(function () {
                 var overlay = $(".overlay-wrapper");
