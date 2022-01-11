@@ -62,7 +62,7 @@
                         contentType: "application/json",
                         data: JSON.stringify(data),
                         type: "POST",
-                        url: "{{ constant('APP_ROOT') }}backend/user/login"
+                        url: "{{ constant('APP_ROOT') }}{{ cfg('backend.folder') ?: 'backend' }}/user/login"
                     }).done(function (response) {
                         if (response.success) {
                             location.replace("{{ result.path }}");

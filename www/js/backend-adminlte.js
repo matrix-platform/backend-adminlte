@@ -746,7 +746,7 @@
 
                 editor.ckeditor({
                     allowedContent: true,
-                    baseHref: document.baseURI.match(/^(.*)(backend\/)$/)[1],
+                    baseHref: document.baseURI.match(/^(.*\/)(\w+\/)$/)[1],
                     bodyClass: editor.data("editorClass") || "ckeditor-body",
                     contentsCss: "css/ckeditor.css",
                     enterMode: window.CKEDITOR.ENTER_BR,
