@@ -6,7 +6,8 @@
     "use strict";
 
     var appendAttachment = function (picker, files) {
-        var multiple = picker.siblings("[type=file]").val("").is("[multiple]");
+        var input = picker.siblings("[type=file]");
+        var multiple = input.is("[multiple]");
         var name = picker.data("name");
         var suffix = picker.data("suffix");
 
@@ -61,6 +62,7 @@
             overlay.show();
         });
 
+        input.val("")
         picker.siblings("input[type=hidden]").remove();
 
         if (!multiple) {
