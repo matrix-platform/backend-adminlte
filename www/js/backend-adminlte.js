@@ -1,9 +1,7 @@
-/*global $,Blob,Sortable,atob,btoa,google,history,toastr*/
+/*global $,Sortable,atob,btoa,google,history,toastr*/
 /*jslint browser,long*/
 
 (function () {
-
-    "use strict";
 
     var appendAttachment = function (picker, files) {
         var input = picker.siblings("[type=file]");
@@ -62,7 +60,7 @@
             overlay.show();
         });
 
-        input.val("")
+        input.val("");
         picker.siblings("input[type=hidden]").remove();
 
         if (!multiple) {
@@ -82,7 +80,7 @@
         var anchor = $(".breadcrumb-item a").last();
 
         if (parameters) {
-            anchor.attr("href", anchor.attr("href") + "?" + atob(parameters));
+            anchor.attr("href", `${anchor.attr("href")}?${atob(parameters)}`);
         }
 
         anchor.click();
@@ -94,12 +92,12 @@
 
         $.each($.extend(data.parameters, extra), function (name, value) {
             if (!excludes || excludes.indexOf(name) < 0) {
-                parameters.push(name + "=" + encodeURIComponent(value));
+                parameters.push(`${name}=${encodeURIComponent(value)}`);
             }
         });
 
         if (parameters.length) {
-            return data.url + "?" + parameters.join("&");
+            return `${data.url}?${parameters.join("&")}`;
         } else {
             return data.url;
         }
@@ -245,7 +243,7 @@
     };
 
     var execute = function (script) {
-        $.globalEval("(function () {" + script + "}());");
+        $.globalEval(`(function () {${script}}());`);
     };
 
     var initMap = function (ignore, element) {
@@ -344,7 +342,6 @@
     };
 
     var processJson = function (response, request) {
-        var parameters;
         var target;
 
         switch (response.type) {
@@ -398,9 +395,8 @@
             }
             if (response.modal) {
                 $(".modal-wrapper .modal").modal("hide");
-                parameters = {d: encode(encodeURIComponent(JSON.stringify(serialize(".form-wrapper"))))};
             }
-            perform(history.state.path, parameters || {});
+            perform(history.state.path, {});
             break;
         case "reload":
             location.reload();
@@ -408,7 +404,7 @@
         case "validation":
             target = $(request["form-id"]);
             $.each(response.errors, function (ignore, error) {
-                $(".invalid-feedback[data-name='" + error.name + "']", target).text(error.message).show();
+                $(`.invalid-feedback[data-name="${error.name}"]`, target).text(error.message).show();
             });
             break;
         default:
@@ -661,7 +657,7 @@
 
         form.find("textarea[rows]").each(function (ignore, element) {
             if (element.scrollHeight) {
-                element.style.height = (element.scrollHeight + 10) + "px";
+                element.style.height = `${element.scrollHeight + 10}px`;
             }
         });
 
@@ -700,7 +696,7 @@
                 inputs.filter(":visible").addClass("d-none");
                 inputs.find("input").val("");
                 inputs.find("option:selected").prop("selected", false).closest("select").trigger("change");
-                inputs.filter("[data-name='" + select.val() + "']").removeClass("d-none");
+                inputs.filter(`[data-name="${select.val()}"]`).removeClass("d-none");
             });
         }
 
@@ -727,7 +723,7 @@
                                     if (images.length === files.length) {
                                         perform("file/upload-images", {
                                             images,
-                                            target: "#" + form.attr("id") + " textarea[name='" + editor.attr("name") + "']"
+                                            target: `#${form.attr("id")} textarea[name="${editor.attr("name")}"]`
                                         });
                                     }
                                 };
@@ -773,7 +769,7 @@
         var menu;
 
         name = name || $(".breadcrumb-item[data-menu]").first().data("menu");
-        menu = $("a[data-leaf][href='" + name + "']").blur();
+        menu = $(`a[data-leaf][href="${name}"]`).blur();
 
         $("a.active[data-leaf]").removeClass("active");
 
@@ -989,7 +985,7 @@
 
         if (localStorage.EXPANDED_MENUS) {
             $.each(JSON.parse(localStorage.EXPANDED_MENUS), function (ignore, menu) {
-                $("a[data-branch='" + menu + "']").parent().addClass("menu-open").children("ul").css("display", "block");
+                $(`a[data-branch="${menu}"]`).parent().addClass("menu-open").children("ul").css("display", "block");
             });
         }
 
