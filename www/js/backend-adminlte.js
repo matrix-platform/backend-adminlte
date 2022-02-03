@@ -14,50 +14,43 @@
         }
 
         $.each(files, function (ignore, file) {
-            var reader = new FileReader();
+            var url = URL.createObjectURL(file);
+            var filename = file.name.replace(/"/g, "&quot;");
 
-            reader.onload = function () {
-                var filename = file.name.replace(/"/g, "&quot;");
+            resources[url] = {file, url};
 
-                overlay.hide();
-
-                if (picker.hasClass("picture-picker")) {
-                    picker.before([
-                        `<div class="attachment-wrapper picture-wrapper rounded">`,
-                        `<div class="picture-preview">`,
-                        `<a data-toggle="lightbox" href="${reader.result}"><img alt="${filename}" src="${reader.result}"></a>`,
-                        `</div>`,
-                        `<div class="picture-controller">`,
-                        `<div class="btn-group w-100">`,
-                        `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-cloud-download-alt"></i></button>`,
-                        `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
-                        `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
-                        `</div>`,
-                        `</div>`,
-                        `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
-                        `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
-                        `</div>`
-                    ].join(""));
-                } else {
-                    picker.before([
-                        `<div class="attachment-wrapper file-wrapper list-group-item">`,
-                        `<a download="${filename}" href="${reader.result}">`,
-                        filename.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
-                        `</a>`,
-                        `<div class="btn-group">`,
-                        `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
-                        `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
-                        `</div>`,
-                        `<input name="${name}${suffix}" type="hidden" value="${reader.result}">`,
-                        `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
-                        `</div>`
-                    ].join(""));
-                }
-            };
-
-            reader.readAsDataURL(file);
-
-            overlay.show();
+            if (picker.hasClass("picture-picker")) {
+                picker.before([
+                    `<div class="attachment-wrapper picture-wrapper rounded">`,
+                    `<div class="picture-preview">`,
+                    `<a data-toggle="lightbox" data-type="image" href="${url}"><img alt="${filename}" src="${url}"></a>`,
+                    `</div>`,
+                    `<div class="picture-controller">`,
+                    `<div class="btn-group w-100">`,
+                    `<a class="btn btn-default btn-flat border-0" download="${filename}" href="${url}" title="${filename}"><i class="fas fa-cloud-download-alt"></i></a>`,
+                    `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
+                    `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
+                    `</div>`,
+                    `</div>`,
+                    `<input data-object-url name="${name}${suffix}" type="hidden" value="${url}">`,
+                    `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
+                    `</div>`
+                ].join(""));
+            } else {
+                picker.before([
+                    `<div class="attachment-wrapper file-wrapper list-group-item">`,
+                    `<a download="${filename}" href="${url}">`,
+                    filename.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
+                    `</a>`,
+                    `<div class="btn-group">`,
+                    `<button class="btn btn-default btn-flat border-0" disabled><i class="fas fa-info"></i></button>`,
+                    `<button class="btn btn-default btn-flat border-0" data-remove-attachment><i class="fas fa-trash-alt"></i></button>`,
+                    `</div>`,
+                    `<input data-object-url name="${name}${suffix}" type="hidden" value="${url}">`,
+                    `<input name="${name}#filename${suffix}" type="hidden" value="${filename}">`,
+                    `</div>`
+                ].join(""));
+            }
         });
 
         input.val("");
@@ -167,6 +160,12 @@
 
         target.find("input[data-format=date],input[data-format=datetime]").each(function (ignore, element) {
             $(element).data("daterangepicker").remove();
+        });
+
+        target.find("input[data-object-url]").each(function (ignore, element) {
+            URL.revokeObjectURL(element.value);
+
+            delete resources[element.value];
         });
 
         if ($.fn.select2) {
@@ -310,6 +309,8 @@
     };
 
     var perform = function (path, parameters, options = {}) {
+        var form = options.form || new FormData();
+
         if (options.overlay !== false) {
             overlay.show();
         }
@@ -320,19 +321,28 @@
 
         if (!$.isPlainObject(parameters)) {
             parameters = serialize(parameters);
+
+            parameters.files.forEach(function (item) {
+                form.append(item.url, item.file);
+            });
+
+            parameters = parameters.data;
         }
 
         if (options.parameters) {
             $.extend(parameters, options.parameters);
         }
 
+        form.append("JSON", JSON.stringify(parameters));
+
         return $.ajax({
             complete() {
                 complete(options);
             },
-            contentType: "application/json",
-            data: JSON.stringify(parameters),
+            contentType: false,
+            data: form,
             error,
+            processData: false,
             success: function (data) {
                 success(data, parameters);
             },
@@ -448,6 +458,8 @@
         perform(state.path, parameters || {});
     };
 
+    var resources = {};
+
     var saveMenu = function () {
         var menus = [];
 
@@ -465,6 +477,7 @@
     var serialize = function (expression) {
         var data = {};
         var form = $(expression);
+        var files = [];
         var list;
 
         form.find("input,select,textarea").each(function (ignore, element) {
@@ -476,6 +489,12 @@
                     if (!element.checked) {
                         combine(data, element.name, null);
                         return;
+                    }
+                    break;
+
+                case "hidden":
+                    if ($(element).is("[data-object-url]")) {
+                        files.push(resources[element.value]);
                     }
                     break;
 
@@ -526,7 +545,7 @@
             data.list = list;
         }
 
-        return data;
+        return {data, files};
     };
 
     var settings = $.extend({
@@ -712,24 +731,13 @@
                 } else {
                     config.callbacks = {
                         onImageUpload: function (files) {
-                            var images = [];
+                            var data = new FormData();
 
-                            $.each(files, function (index, file) {
-                                var reader = new FileReader();
-
-                                reader.onload = function () {
-                                    images[index] = {file: reader.result, "file#filename": file.name};
-
-                                    if (images.length === files.length) {
-                                        perform("file/upload-images", {
-                                            images,
-                                            target: `#${form.attr("id")} textarea[name="${editor.attr("name")}"]`
-                                        });
-                                    }
-                                };
-
-                                reader.readAsDataURL(file);
+                            $.each(files, function (ignore, file) {
+                                data.append("images[]", file);
                             });
+
+                            perform("file/upload-images", {target: `#${form.attr("id")} textarea[name="${editor.attr("name")}"]`}, {form: data});
                         }
                     };
 
@@ -858,6 +866,12 @@
         var picker = file.siblings(".attachment-picker").removeClass("d-none");
         var suffix;
 
+        file.find("input[data-object-url]").each(function (ignore, element) {
+            URL.revokeObjectURL(element.value);
+
+            delete resources[element.value];
+        });
+
         file.remove();
 
         if (!picker.siblings(".attachment-wrapper").length) {
@@ -868,7 +882,7 @@
         }
     }).delegate("button[data-search]", "click", function (event) {
         var form = $(event.currentTarget).data("form");
-        var data = serialize(form);
+        var data = serialize(form).data;
         var path = history.state.path;
         var search = {};
 
@@ -901,18 +915,15 @@
         if (!input.data("binding")) {
             input.on("change", function () {
                 var file = input[0].files && input[0].files[0];
-                var reader;
+                var form;
 
                 if (file) {
-                    reader = new FileReader();
+                    form = new FormData();
+                    form.append("file", file);
 
-                    reader.onload = function () {
-                        perform(input.data("ajax"), {file: reader.result, "file#filename": file.name});
+                    perform(input.data("ajax"), {}, {form});
 
-                        input.val("");
-                    };
-
-                    reader.readAsDataURL(file);
+                    input.val("");
                 }
             });
 
