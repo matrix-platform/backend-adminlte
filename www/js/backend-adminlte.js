@@ -3,19 +3,19 @@
 
 (function () {
 
-    var appendAttachment = function (picker, files) {
-        var input = picker.siblings("[type=file]");
-        var multiple = input.is("[multiple]");
-        var name = picker.data("name");
-        var suffix = picker.data("suffix");
+    let appendAttachment = function (picker, files) {
+        let input = picker.siblings("[type=file]");
+        let multiple = input.is("[multiple]");
+        let name = picker.data("name");
+        let suffix = picker.data("suffix");
 
         if (!multiple && files.length > 1) {
             files = [files[0]];
         }
 
         $.each(files, function (ignore, file) {
-            var url = URL.createObjectURL(file);
-            var filename = file.name.replace(/"/g, "&quot;");
+            let filename = file.name.replace(/"/g, "&quot;");
+            let url = URL.createObjectURL(file);
 
             resources[url] = {file, url};
 
@@ -61,16 +61,16 @@
         }
     };
 
-    var attachment = function (event) {
-        var files = event.currentTarget.files;
+    let attachment = function (event) {
+        let files = event.currentTarget.files;
 
         if (files && files.length) {
             appendAttachment($(event.currentTarget).siblings(".attachment-picker"), files);
         }
     };
 
-    var backward = function (parameters) {
-        var anchor = $(".breadcrumb-item a").last();
+    let backward = function (parameters) {
+        let anchor = $(".breadcrumb-item a").last();
 
         if (parameters) {
             anchor.attr("href", `${anchor.attr("href")}?${atob(parameters)}`);
@@ -79,9 +79,9 @@
         anchor.click();
     };
 
-    var build = function (href, extra, excludes) {
-        var data = parse(href);
-        var parameters = [];
+    let build = function (href, extra, excludes) {
+        let data = parse(href);
+        let parameters = [];
 
         $.each($.extend(data.parameters, extra), function (name, value) {
             if (!excludes || excludes.indexOf(name) < 0) {
@@ -96,15 +96,13 @@
         }
     };
 
-    var combine = function (data, name, value) {
-        var current;
-
+    let combine = function (data, name, value) {
         if (empty(value)) {
             value = null;
         }
 
         if (data.hasOwnProperty(name)) {
-            current = data[name];
+            let current = data[name];
 
             if (Array.isArray(current)) {
                 current.push(value);
@@ -116,36 +114,31 @@
         }
     };
 
-    var complete = function (options) {
+    let complete = function (options) {
         if (options.overlay !== false) {
             setTimeout(overlay.hide);
         }
     };
 
-    var createMap = function (container, center) {
-        var latitude = $(`input[name="${container.data("latitude")}"]`);
-        var longitude = $(`input[name="${container.data("longitude")}"]`);
-        var map;
-        var marker;
-
+    let createMap = function (container, center) {
         if (!center) {
             center = new google.maps.LatLng(settings.latitude, settings.longitude);
         }
 
-        map = new google.maps.Map(container[0], {center, zoom: settings.map_zoom});
-        marker = new google.maps.Marker({draggable: !container.data("disabled"), map, position: center});
+        let map = new google.maps.Map(container[0], {center, zoom: settings.map_zoom});
+        let marker = new google.maps.Marker({draggable: !container.data("disabled"), map, position: center});
 
         marker.addListener("position_changed", function () {
-            var position = marker.getPosition();
+            let position = marker.getPosition();
 
-            latitude.val(position.lat());
-            longitude.val(position.lng());
+            $(`input[name="${container.data("latitude")}"]`).val(position.lat());
+            $(`input[name="${container.data("longitude")}"]`).val(position.lng());
         });
 
         container.data("map", map).data("marker", marker).data("service", new google.maps.places.PlacesService(map));
     };
 
-    var destroy = function (target) {
+    let destroy = function (target) {
         target.find("div.attachment-container, div.options-checked").each(function (ignore, element) {
             Sortable.get(element).destroy();
         });
@@ -174,7 +167,7 @@
 
         if ($.fn.summernote) {
             target.find("textarea[data-format=html]").each(function (ignore, element) {
-                var editor = $(element);
+                let editor = $(element);
 
                 if (editor.summernote("fullscreen.isFullscreen")) {
                     editor.summernote("fullscreen.toggle");
@@ -197,21 +190,19 @@
         target.hide().empty();
     };
 
-    var download = function (response) {
-        var anchor;
-        var file;
-        var raw = atob(response.content);
-        var size = raw.length;
-        var data = new Array(size);
+    let download = function (response) {
+        let raw = atob(response.content);
+        let size = raw.length;
+        let data = new Array(size);
 
         while (size) {
             size -= 1;
             data[size] = raw.charCodeAt(size);
         }
 
-        file = new Blob([new Uint8Array(data)], {type: response.contentType});
+        let anchor = document.getElementById("download-anchor");
+        let file = new Blob([new Uint8Array(data)], {type: response.contentType});
 
-        anchor = document.getElementById("download-anchor");
         anchor.download = response.filename;
         anchor.href = URL.createObjectURL(file);
         anchor.click();
@@ -219,7 +210,7 @@
         URL.revokeObjectURL(anchor.href);
     };
 
-    var empty = function (value) {
+    let empty = function (value) {
         if (value) {
             return false;
         }
@@ -227,11 +218,11 @@
         return value === "" || value === null || value === undefined;
     };
 
-    var encode = function (text) {
+    let encode = function (text) {
         return btoa(text).replace(/\+/g, "-").replace(/\//g, "_").replace(/\=/g, "");
     };
 
-    var error = function (response) {
+    let error = function (response) {
         switch (response.status) {
         case 401:
             location.reload();
@@ -241,14 +232,14 @@
         }
     };
 
-    var execute = function (script) {
+    let execute = function (script) {
         $.globalEval(`(function () {${script}}());`);
     };
 
-    var initMap = function (ignore, element) {
-        var container = $(element);
-        var lat = $(`input[name="${container.data("latitude")}"]`).val();
-        var lng = $(`input[name="${container.data("longitude")}"]`).val();
+    let initMap = function (ignore, element) {
+        let container = $(element);
+        let lat = $(`input[name="${container.data("latitude")}"]`).val();
+        let lng = $(`input[name="${container.data("longitude")}"]`).val();
 
         if (!lat || !lng) {
             if (navigator.geolocation) {
@@ -265,19 +256,19 @@
         }
     };
 
-    var overlay = (function () {
-        var overlays = 0;
-        var wrapper = $(".overlay-wrapper");
+    let overlay = (function () {
+        let overlays = 0;
+        let wrapper = $(".overlay-wrapper");
 
         return {
-            hide: function () {
+            hide() {
                 overlays -= 1;
 
                 if (!overlays) {
                     wrapper.hide();
                 }
             },
-            show: function () {
+            show() {
                 if (!overlays) {
                     wrapper.show();
                 }
@@ -287,9 +278,9 @@
         };
     }());
 
-    var parse = function (href) {
-        var parameters = {};
-        var url;
+    let parse = function (href) {
+        let parameters = {};
+        let url;
 
         $.each(href.split(/[?&]/), function (index, text) {
             if (index) {
@@ -308,8 +299,8 @@
         return {parameters, url};
     };
 
-    var perform = function (path, parameters, options = {}) {
-        var form = options.form || new FormData();
+    let perform = function (path, parameters, options = {}) {
+        let form = options.form || new FormData();
 
         if (options.overlay !== false) {
             overlay.show();
@@ -343,7 +334,7 @@
             data: form,
             error,
             processData: false,
-            success: function (data) {
+            success(data) {
                 success(data, parameters);
             },
             type: "POST",
@@ -351,8 +342,8 @@
         });
     };
 
-    var processJson = function (response, request) {
-        var target;
+    let processJson = function (response, request) {
+        let target;
 
         switch (response.type) {
         case "backward":
@@ -368,7 +359,7 @@
             toastr.info(response.message);
             $(".modal-wrapper .modal").modal("hide");
             $(`button[data-ajax="file-info/${response.id}"]`).each(function (ignore, element) {
-                var wrapper = $(element).closest(".attachment-wrapper");
+                let wrapper = $(element).closest(".attachment-wrapper");
                 if (wrapper.hasClass("picture-wrapper")) {
                     wrapper.find("a[data-toggle]").attr("title", response.description);
                     wrapper.find("a[download]").attr("download", response.name).attr("title", response.name);
@@ -424,10 +415,10 @@
         }
     };
 
-    var processXml = function (ignore, response) {
-        var data = $(response);
-        var expression = data.children("target").text().trim();
-        var target;
+    let processXml = function (ignore, response) {
+        let data = $(response);
+        let expression = data.children("target").text().trim();
+        let target;
 
         if (expression) {
             target = $(expression);
@@ -446,7 +437,7 @@
         }
     };
 
-    var redirect = function (state, replace, parameters) {
+    let redirect = function (state, replace, parameters) {
         if (replace) {
             history.replaceState(state, "", state.path);
         } else {
@@ -458,13 +449,13 @@
         perform(state.path, parameters || {});
     };
 
-    var resources = {};
+    let resources = {};
 
-    var saveMenu = function () {
-        var menus = [];
+    let saveMenu = function () {
+        let menus = [];
 
         $("a[data-branch]").each(function (ignore, element) {
-            var node = $(element);
+            let node = $(element);
 
             if (node.parent().hasClass("menu-open")) {
                 menus.push(node.data("branch"));
@@ -474,14 +465,13 @@
         localStorage.EXPANDED_MENUS = JSON.stringify(menus);
     };
 
-    var serialize = function (expression) {
-        var data = {};
-        var form = $(expression);
-        var files = [];
-        var list;
+    let serialize = function (expression) {
+        let data = {};
+        let files = [];
+        let form = $(expression);
 
         form.find("input,select,textarea").each(function (ignore, element) {
-            var input;
+            let input;
 
             if (element.name) {
                 switch (element.type) {
@@ -523,14 +513,13 @@
         });
 
         if (form.is("table") || form.hasClass("editable-list")) {
-            list = {};
+            let list = {};
 
             $.each(Object.keys(data), function (ignore, name) {
-                var id;
-                var tokens = name.split("@");
+                let tokens = name.split("@");
 
                 if (tokens.length === 2) {
-                    id = tokens[1];
+                    let id = tokens[1];
 
                     if (!list[id]) {
                         list[id] = {id};
@@ -548,14 +537,14 @@
         return {data, files};
     };
 
-    var settings = $.extend({
+    let settings = $.extend({
         latitude: 24.1736774,
         longitude: 120.6686102,
         map_zoom: 16,
         overview: "overview"
     }, $("script:last").data());
 
-    var sortableAttachment = function (ignore, element) {
+    let sortableAttachment = function (ignore, element) {
         Sortable.create(element, {
             animation: 200,
             filter: "button",
@@ -565,12 +554,12 @@
         });
     };
 
-    var sortableOptions = function (ignore, element) {
-        var unchecked = $(element);
-        var checked = unchecked.prev("div.options-checked");
+    let sortableOptions = function (ignore, element) {
+        let unchecked = $(element);
+        let checked = unchecked.prev("div.options-checked");
 
         unchecked.delegate("div", "click", function (event) {
-            var option = $(event.currentTarget);
+            let option = $(event.currentTarget);
 
             option.append(`<input name="${unchecked.data("inputName")}" type="hidden" value="${option.data("inputValue")}">`);
             option.appendTo(checked.children("input").remove().end());
@@ -587,7 +576,7 @@
         Sortable.create(checked[0], {animation: 150});
     };
 
-    var success = function (data, parameters) {
+    let success = function (data, parameters) {
         if ($.isPlainObject(data)) {
             processJson(data, parameters);
         } else {
@@ -595,15 +584,15 @@
         }
     };
 
-    var toggleControls = function (checked) {
-        var list = [];
+    let toggleControls = function (checked) {
+        let list = [];
 
         checked.each(function (ignore, input) {
             list.push($(input).data("id"));
         });
 
         $("button[data-least]").data("args", list).each(function (ignore, element) {
-            var button = $(element);
+            let button = $(element);
 
             button.prop("disabled", list.length < button.data("least"));
         });
@@ -631,12 +620,12 @@
         form.find("div.options-unchecked").each(sortableOptions);
 
         form.find("div[data-format=color]").each(function (ignore, element) {
-            var target = $(element);
-            var input = target.find("input");
-            var output = target.find(".input-group-text");
+            let target = $(element);
+            let input = target.find("input");
+            let output = target.find(".input-group-text");
 
             target.colorpicker().on("colorpickerChange", function (event) {
-                var color = "";
+                let color = "";
 
                 if (event.color) {
                     color = event.color.toString();
@@ -649,7 +638,7 @@
         });
 
         form.find("div[data-format=time]").each(function (ignore, element) {
-            var target = $(element);
+            let target = $(element);
 
             target.datetimepicker({
                 format: target.data("pattern")
@@ -657,7 +646,7 @@
         });
 
         form.find("input[data-format=date],input[data-format=datetime]").each(function (ignore, element) {
-            var input = $(element);
+            let input = $(element);
 
             input.daterangepicker({
                 autoUpdateInput: false,
@@ -682,8 +671,8 @@
 
         if ($.fn.select2) {
             form.find("select.select2bs4").each(function (ignore, element) {
-                var select = $(element);
-                var options = {theme: "bootstrap4"};
+                let options = {theme: "bootstrap4"};
+                let select = $(element);
 
                 if (!select.is("[data-searchable]")) {
                     options.minimumResultsForSearch = Infinity;
@@ -697,20 +686,20 @@
 
                 select.select2(options);
             }).filter("[data-cascade]").each(function (ignore, element) {
-                var select = $(element);
-                var target = $(`select[name="${select.data("cascade")}"]`);
-                var options = target.find("[data-parent-id]");
+                let select = $(element);
+                let target = $(`select[name="${select.data("cascade")}"]`);
+                let options = target.find("[data-parent-id]");
 
                 select.on("change", function () {
-                    var selected = target.val();
-                    var removed = options.prop("selected", false).filter(`[data-parent-id!="${select.val()}"]`).remove();
+                    let removed = options.prop("selected", false).filter(`[data-parent-id!="${select.val()}"]`).remove();
+                    let selected = target.val();
 
                     options.not(removed).appendTo(target).filter(`[value="${selected}"]`).prop("selected", true);
                     target.trigger("change");
                 }).change();
             }).end().filter("[data-search]").on("change", function (event) {
-                var select = $(event.currentTarget);
-                var inputs = select.closest("[id]").find("[data-name]");
+                let select = $(event.currentTarget);
+                let inputs = select.closest("[id]").find("[data-name]");
 
                 inputs.filter(":visible").addClass("d-none");
                 inputs.find("input").val("");
@@ -721,8 +710,8 @@
 
         if ($.fn.summernote) {
             form.find("textarea[data-format=html]").each(function (ignore, element) {
-                var editor = $(element);
-                var config = {height: 300, placeholder: editor.data("placeholder")};
+                let editor = $(element);
+                let config = {height: 300, placeholder: editor.data("placeholder")};
 
                 if (editor.is("[data-disabled]")) {
                     config.toolbar = [];
@@ -730,8 +719,8 @@
                     editor.summernote(config).summernote("disable");
                 } else {
                     config.callbacks = {
-                        onImageUpload: function (files) {
-                            var data = new FormData();
+                        onImageUpload(files) {
+                            let data = new FormData();
 
                             $.each(files, function (ignore, file) {
                                 data.append("images[]", file);
@@ -748,7 +737,7 @@
 
         if (window.CKEDITOR) {
             form.find("textarea[data-format=html]").each(function (ignore, element) {
-                var editor = $(element);
+                let editor = $(element);
 
                 editor.ckeditor({
                     allowedContent: true,
@@ -774,10 +763,9 @@
     window.perform = perform;
 
     window.toggleMenu = function (name) {
-        var menu;
-
         name = name || $(".breadcrumb-item[data-menu]").first().data("menu");
-        menu = $(`a[data-leaf][href="${name}"]`).blur();
+
+        let menu = $(`a[data-leaf][href="${name}"]`).blur();
 
         $("a.active[data-leaf]").removeClass("active");
 
@@ -793,9 +781,9 @@
     });
 
     $(document).delegate("a[data-ajax]", "click", function (event) {
-        var anchor = $(event.currentTarget);
-        var modal = anchor.closest(".modal");
-        var path = anchor.attr("href");
+        let anchor = $(event.currentTarget);
+        let modal = anchor.closest(".modal");
+        let path = anchor.attr("href");
 
         if (modal.length) {
             modal.one("hidden.bs.modal", function () {
@@ -825,8 +813,8 @@
 
         return false;
     }).delegate("button.attachment-picker", "drop", function (event) {
-        var files;
-        var picker = $(event.currentTarget).removeClass("highlight");
+        let files;
+        let picker = $(event.currentTarget).removeClass("highlight");
 
         if (picker.hasClass("picture-picker")) {
             files = [];
@@ -846,9 +834,9 @@
 
         return false;
     }).delegate("button[data-ajax]", "click", function (event) {
-        var button = $(event.currentTarget);
-        var form = button.data("form");
-        var options;
+        let button = $(event.currentTarget);
+        let form = button.data("form");
+        let options;
 
         if (form) {
             $(".invalid-feedback", form).hide().empty();
@@ -861,10 +849,8 @@
     }).delegate("button[data-backward]", "click", function (event) {
         backward($(event.currentTarget).data("backward"));
     }).delegate("button[data-remove-attachment]", "click", function (event) {
-        var file = $(event.currentTarget).closest(".attachment-wrapper");
-        var name;
-        var picker = file.siblings(".attachment-picker").removeClass("d-none");
-        var suffix;
+        let file = $(event.currentTarget).closest(".attachment-wrapper");
+        let picker = file.siblings(".attachment-picker").removeClass("d-none");
 
         file.find("input[data-object-url]").each(function (ignore, element) {
             URL.revokeObjectURL(element.value);
@@ -875,19 +861,19 @@
         file.remove();
 
         if (!picker.siblings(".attachment-wrapper").length) {
-            name = picker.data("name");
-            suffix = picker.data("suffix");
+            let name = picker.data("name");
+            let suffix = picker.data("suffix");
 
             picker.after(`<input name="${name}${suffix}" type="hidden"><input name="${name}#filename${suffix}" type="hidden">`);
         }
     }).delegate("button[data-search]", "click", function (event) {
-        var form = $(event.currentTarget).data("form");
-        var data = serialize(form).data;
-        var path = history.state.path;
-        var search = {};
+        let form = $(event.currentTarget).data("form");
+        let data = serialize(form).data;
+        let path = history.state.path;
+        let search = {};
 
         $.each(Object.keys(data), function (ignore, name) {
-            var value = data[name];
+            let value = data[name];
 
             if (Array.isArray(value)) {
                 if (value.length) {
@@ -910,15 +896,15 @@
 
         redirect({path}, false, {"form-id": form});
     }).delegate("button[data-upload]", "click", function (event) {
-        var input = $(event.currentTarget).siblings("input");
+        let input = $(event.currentTarget).siblings("input");
 
         if (!input.data("binding")) {
             input.on("change", function () {
-                var file = input[0].files && input[0].files[0];
-                var form;
+                let file = input[0].files && input[0].files[0];
 
                 if (file) {
-                    form = new FormData();
+                    let form = new FormData();
+
                     form.append("file", file);
 
                     perform(input.data("ajax"), {}, {form});
@@ -932,47 +918,48 @@
 
         input.click();
     }).delegate("input[data-all][type=checkbox]", "change", function (event) {
-        var checkbox = $(event.currentTarget);
-        var list = $(`input[data-group="${checkbox.data("group")}"][data-id][type=checkbox]`);
+        let checkbox = $(event.currentTarget);
+        let list = $(`input[data-group="${checkbox.data("group")}"][data-id][type=checkbox]`);
 
         list.prop("checked", checkbox.prop("checked"));
 
         toggleControls(list.filter(":checked"));
     }).delegate("input[data-id][type=checkbox]", "change", function (event) {
-        var group = $(event.currentTarget).data("group");
-        var list = $(`input[data-group="${group}"][data-id][type=checkbox]`);
-        var checked = list.filter(":checked");
+        let group = $(event.currentTarget).data("group");
+        let list = $(`input[data-group="${group}"][data-id][type=checkbox]`);
+        let checked = list.filter(":checked");
 
         $(`input[data-all][data-group="${group}"][type=checkbox]`).prop("checked", list.length === checked.length);
 
         toggleControls(checked);
     }).delegate("input[data-switch][type=checkbox]", "change", function (event) {
-        var checkbox = $(event.currentTarget).prop("disabled", true);
-        var value = checkbox.prop("checked");
+        let checkbox = $(event.currentTarget).prop("disabled", true);
+        let value = checkbox.prop("checked");
+
         perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}, {overlay: false}).fail(function () {
             checkbox.prop("checked", !value);
         }).always(function () {
             checkbox.prop("disabled", false);
         });
     }).delegate("select[data-reaction]", "change", function (event) {
-        var parameters = {};
-        var select = $(event.currentTarget);
+        let parameters = {};
+        let select = $(event.currentTarget);
+
         parameters[select.attr("name")] = select.val();
+
         perform(select.data("reaction"), parameters);
     }).delegate("select[name=p]", "change", function (event) {
         redirect({path: build(history.state.path, {p: $(event.currentTarget).val()})});
     }).delegate("span.search-place", "click", function (event) {
-        var container;
-        var input = $(event.currentTarget).parent().siblings("input");
-        var matches;
-        var position;
-        var query = input.val().trim();
+        let input = $(event.currentTarget).parent().siblings("input");
+        let position;
+        let query = input.val().trim();
 
         if (query) {
-            container = input.parent().siblings("div.google-map");
+            let container = input.parent().siblings("div.google-map");
 
             if (container.data("map")) {
-                matches = query.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
+                let matches = query.match(/^(-?\d+\.\d+),(-?\d+\.\d+)$/);
 
                 if (matches) {
                     position = new google.maps.LatLng(matches[1], matches[2]);

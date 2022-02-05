@@ -3,13 +3,11 @@
 
 (function () {
 
-    "use strict";
+    let active = false;
 
-    var active = false;
+    let count = 0;
 
-    var count = 0;
-
-    var edit = function (event) {
+    let edit = function (event) {
         if (window.editLabel) {
             window.editLabel($(event.currentTarget).data("edit"));
         }
@@ -17,8 +15,8 @@
         return false;
     };
 
-    var restore = function (ignore, element) {
-        var node = $(element);
+    let restore = function (ignore, element) {
+        let node = $(element);
 
         if (!node.data("length")) {
             node.empty();
@@ -27,9 +25,9 @@
         node.off("click", edit).removeClass("editable-label");
     };
 
-    var setup = function (ignore, element) {
-        var node = $(element);
-        var length = node.html().length;
+    let setup = function (ignore, element) {
+        let node = $(element);
+        let length = node.html().length;
 
         if (!length) {
             node.text("{" + node.data("edit") + "}");
@@ -38,8 +36,8 @@
         node.addClass("editable-label").data("length", length).on("click", edit);
     };
 
-    var toggle = function () {
-        var elements = $("[data-edit]");
+    let toggle = function () {
+        let elements = $("[data-edit]");
 
         active = !active;
 
