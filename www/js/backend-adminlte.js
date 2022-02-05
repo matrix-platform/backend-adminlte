@@ -259,6 +259,7 @@
     let overlay = (function () {
         let overlays = 0;
         let wrapper = $(".overlay-wrapper");
+        let progress = wrapper.find(".upload-progress");
 
         return {
             hide() {
@@ -266,6 +267,14 @@
 
                 if (!overlays) {
                     wrapper.hide();
+                    progress.text("");
+                }
+            },
+            progress(percent) {
+                if (overlays) {
+                    if (percent < 100 || progress.text()) {
+                        progress.text(`${percent}%`);
+                    }
                 }
             },
             show() {
@@ -338,7 +347,8 @@
                 success(data, parameters);
             },
             type: "POST",
-            url: path
+            url: path,
+            xhr
         });
     };
 
@@ -596,6 +606,18 @@
 
             button.prop("disabled", list.length < button.data("least"));
         });
+    };
+
+    let xhr = function () {
+        let request = new XMLHttpRequest();
+
+        request.upload.addEventListener("progress", function (event) {
+            if (event.lengthComputable) {
+                overlay.progress(Math.round(event.loaded * 100 / event.total));
+            }
+        }, false);
+
+        return request;
     };
 
     toastr.options = {
