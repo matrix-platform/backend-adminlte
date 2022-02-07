@@ -119,8 +119,10 @@
 {% if map_key %}
         <script src="https://maps.googleapis.com/maps/api/js?language={{ i18n('locale.google-map') }}&libraries=places&key={{ map_key }}"></script>
 {% endif %}
+        <script src="{{ prefix }}js/underscore-umd-min.js"></script>
         <script src="{{ prefix }}js/label-editor.js"></script>
         <script src="{{ prefix }}js/{{ cfg('system.csrf-token-type') }}-token.js"></script>
-        <script data-language="{{ language }}" data-path="{{ controller.args()|join('/') }}" src="{{ prefix }}js/backend-adminlte.js"></script>
+        <script src="locale.js"></script>
+        <script data-language="{{ language }}" data-max-file-count="{{ result.max_file_uploads }}" data-max-file-size="{{ result.upload_max_filesize }}" data-max-post-size="{{ result.post_max_size }}" data-path="{{ controller.args()|join('/') }}" src="{{ prefix }}js/backend-adminlte.js"></script>
     </body>
 </html>

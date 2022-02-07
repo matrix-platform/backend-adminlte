@@ -94,3 +94,7 @@
 .sortable-ghost > * {
     visibility: hidden;
 }
+
+.new-attachment {
+    border-color: limegreen;
+}

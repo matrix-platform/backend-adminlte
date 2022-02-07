@@ -1,4 +1,4 @@
-/*global $,Sortable,atob,btoa,google,history,toastr*/
+/*global $,Sortable,_,atob,btoa,google,history,i18n,toastr*/
 /*jslint browser,long*/
 
 (function () {
@@ -14,6 +14,11 @@
         }
 
         $.each(files, function (ignore, file) {
+            if (file.size > settings.maxFileSize) {
+                toastr.error(render(i18n.fileSize, {max: settings.maxFileSize, name: file.name, size: file.size}));
+                return;
+            }
+
             let filename = file.name.replace(/"/g, "&quot;");
             let url = URL.createObjectURL(file);
 
@@ -21,7 +26,7 @@
 
             if (picker.hasClass("picture-picker")) {
                 picker.before([
-                    `<div class="attachment-wrapper picture-wrapper rounded">`,
+                    `<div class="attachment-wrapper new-attachment picture-wrapper">`,
                     `<div class="picture-preview">`,
                     `<a data-toggle="lightbox" data-type="image" href="${url}"><img alt="${filename}" src="${url}"></a>`,
                     `</div>`,
@@ -38,7 +43,7 @@
                 ].join(""));
             } else {
                 picker.before([
-                    `<div class="attachment-wrapper file-wrapper list-group-item">`,
+                    `<div class="attachment-wrapper file-wrapper list-group-item new-attachment">`,
                     `<a download="${filename}" href="${url}">`,
                     filename.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"),
                     `</a>`,
@@ -54,6 +59,11 @@
         });
 
         input.val("");
+
+        if (!picker.siblings(".attachment-wrapper").length) {
+            return;
+        }
+
         picker.siblings("input[type=hidden]").remove();
 
         if (!multiple) {
@@ -113,6 +123,8 @@
             data[name] = value;
         }
     };
+
+    let compiled = {};
 
     let complete = function (options) {
         if (options.overlay !== false) {
@@ -311,14 +323,6 @@
     let perform = function (path, parameters, options = {}) {
         let form = options.form || new FormData();
 
-        if (options.overlay !== false) {
-            overlay.show();
-        }
-
-        if (empty(path)) {
-            path = settings.overview;
-        }
-
         if (!$.isPlainObject(parameters)) {
             parameters = serialize(parameters);
 
@@ -334,6 +338,36 @@
         }
 
         form.append("JSON", JSON.stringify(parameters));
+
+        let count = 0;
+        let size = 0;
+
+        Array.from(form.values()).forEach(function (value) {
+            if (typeof value === "string") {
+                size += value.length;
+            } else {
+                count += 1;
+                size += value.size;
+            }
+        });
+
+        if (count > settings.maxFileCount) {
+            toastr.error(render(i18n.fileCount, {count, max: settings.maxFileCount}));
+            return;
+        }
+
+        if (size + 2048 > settings.maxPostSize) {
+            toastr.error(render(i18n.postSize, {max: settings.maxPostSize, size: size + 2048}));
+            return;
+        }
+
+        if (options.overlay !== false) {
+            overlay.show();
+        }
+
+        if (empty(path)) {
+            path = settings.overview;
+        }
 
         return $.ajax({
             complete() {
@@ -457,6 +491,14 @@
         }
 
         perform(state.path, parameters || {});
+    };
+
+    let render = function (template, data) {
+        if (!compiled[template]) {
+            compiled[template] = _.template(template);
+        }
+
+        return compiled[template](data);
     };
 
     let resources = {};
@@ -620,6 +662,10 @@
         return request;
     };
 
+    _.templateSettings = {
+        interpolate: /\{\{(.+?)\}\}/g
+    };
+
     toastr.options = {
         onclick(event) {
             event.clickToClose = true;
@@ -745,8 +791,17 @@
                             let data = new FormData();
 
                             $.each(files, function (ignore, file) {
+                                if (file.size > settings.maxFileSize) {
+                                    toastr.error(render(i18n.fileSize, {max: settings.maxFileSize, name: file.name, size: file.size}));
+                                    return;
+                                }
+
                                 data.append("images[]", file);
                             });
+
+                            if (!data.has("images[]")) {
+                                return;
+                            }
 
                             perform("file/upload-images", {target: `#${form.attr("id")} textarea[name="${editor.attr("name")}"]`}, {form: data});
                         }
@@ -925,6 +980,11 @@
                 let file = input[0].files && input[0].files[0];
 
                 if (file) {
+                    if (file.size > settings.maxFileSize) {
+                        toastr.error(render(i18n.fileSize, {max: settings.maxFileSize, name: file.name, size: file.size}));
+                        return;
+                    }
+
                     let form = new FormData();
 
                     form.append("file", file);
