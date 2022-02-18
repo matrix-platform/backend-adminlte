@@ -1069,6 +1069,10 @@
             });
         }
 
+        if (window.CKEDITOR) {
+            window.CKEDITOR.dtd.$removeEmpty.i = 0;
+        }
+
         if (history.state) {
             perform(history.state.path, {});
         } else {
