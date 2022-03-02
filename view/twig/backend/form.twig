@@ -1,12 +1,14 @@
 {% extends 'backend/content-wrapper.twig' %}
 
-{% set data, formId, tabs = result.data, random(), [] %}
+{% set data, formId, tabs = result.data, random(), {default: result.styles|filter(s => not s.column.tab)} %}
 
 {% for style in result.styles %}
-    {% if style.column.tab and style.column.tab not in tabs %}
-        {% set tabs = tabs|merge([style.column.tab]) %}
+    {% if style.column.tab and not tabs[style.column.tab] %}
+        {% set tabs = tabs|merge({(style.column.tab): result.styles|filter(s => s.column.tab == style.column.tab)}) %}
     {% endif %}
 {% endfor %}
+
+{% set tabs = tabs|filter(styles => styles) %}
 
 {% block header %}
     {% include 'backend/content-header.twig' with {
@@ -20,14 +22,9 @@
     <div class="card card-outline card-outline-tabs card-primary rounded-0">
         <div class="border-bottom-0 card-header p-0">
             <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="active nav-link rounded-0" data-toggle="tab" href="#tab-default">
-                        {{ label('backend.tab-default') }}
-                    </a>
-                </li>
-                {% for tab in tabs %}
+                {% for tab in tabs|keys %}
                     <li class="nav-item">
-                        <a class="nav-link rounded-0" data-toggle="tab" href="#tab-{{ tab }}">
+                        <a class="{% if loop.first %}active {% endif %}nav-link rounded-0" data-toggle="tab" href="#tab-{{ tab }}">
                             {{ label("backend.tab-#{tab}") }}
                         </a>
                     </li>
@@ -36,22 +33,9 @@
         </div>
         <div class="card-body form-wrapper" id="_{{ formId }}">
             <div class="tab-content">
-                <div class="active fade show tab-pane" id="tab-default">
-                    {% block default_input %}
-                        {% include 'backend/form/inputs.twig' with {
-                            controller,
-                            data,
-                            styles: result.styles|filter(s => not s.column.tab)
-                        } only %}
-                    {% endblock %}
-                </div>
-                {% for tab in tabs %}
-                    <div class="fade show tab-pane" id="tab-{{ tab }}">
-                        {% include 'backend/form/inputs.twig' with {
-                            controller,
-                            data,
-                            styles: result.styles|filter(s => s.column.tab == tab)
-                        } only %}
+                {% for tab, styles in tabs %}
+                    <div class="{% if loop.first %}active {% endif %}fade show tab-pane" id="tab-{{ tab }}">
+                        {% include 'backend/form/inputs.twig' with {controller, data, styles} only %}
                     </div>
                 {% endfor %}
             </div>
@@ -69,6 +53,7 @@
         {% endif %}
     </div>
 {% endblock %}
+
 {% block postprocess %}
     {{ parent() }}
 
