@@ -1,0 +1,36 @@
+{% extends 'backend/response.twig' %}
+
+{% set formId = result.path|replace({'/': '-'}) %}
+
+{% block target %}#sublist-{{ formId }}{% endblock %}
+
+{% block html %}
+    {% set selectable = false %}
+    {% if result.controls %}
+        {% for item in result.controls %}
+            {% if not selectable and item.least is not null %}
+                {% set selectable = true %}
+            {% endif %}
+        {% endfor %}
+        <div>
+            {% include 'backend/list/controls.twig' with {
+                backward: result.backward,
+                controls: result.controls|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                form,
+                sublist: true
+            } only %}
+        </div>
+    {% endif %}
+    {% include 'backend/list/table.twig' with {
+        actions: result.actions|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+        controller,
+        formId,
+        list: result.data,
+        page: result.page,
+        selectable,
+        size: result.size,
+        styles: result.styles,
+        switches: result.switches|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+        unordered: true
+    } only %}
+{% endblock %}

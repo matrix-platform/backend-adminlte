@@ -441,7 +441,11 @@
             if (response.modal) {
                 $(".modal-wrapper .modal").modal("hide");
             }
-            perform(history.state.path, {});
+            if (response.sublist) {
+                perform($(".active.sublist").data("path"), {});
+            } else {
+                perform(history.state.path, {});
+            }
             break;
         case "reload":
             location.reload();
@@ -875,6 +879,12 @@
         }
 
         return false;
+    }).delegate("a[data-path][data-toggle=tab]", "shown.bs.tab", function (event) {
+        if (event.relatedTarget) {
+            $($(event.relatedTarget).attr("href")).empty();
+        }
+
+        perform($(event.target).data('path'), {});
     }).delegate("a[data-toggle=lightbox]", "click", function (event) {
         $(event.currentTarget).ekkoLightbox();
 

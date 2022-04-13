@@ -18,11 +18,15 @@
                 {% set selectable = true %}
             {% endif %}
         {% endfor %}
-        {% include 'backend/list/controls.twig' with {
-            backward: result.backward,
-            controls: result.controls|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
-            form
-        } only %}
+        <div class="card rounded-0">
+            <div class="card-body p-1">
+                {% include 'backend/list/controls.twig' with {
+                    backward: result.backward,
+                    controls: result.controls|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                    form
+                } only %}
+            </div>
+        </div>
     {% endif %}
     {% if result.filters %}
         {% include 'backend/list/filters.twig' with {

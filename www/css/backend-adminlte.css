@@ -140,6 +140,11 @@ th a, th:hover a {
     margin-top: -1px;
 }
 
+.tab-pane > .table > thead > tr > td,
+.tab-pane > .table > thead > tr > th {
+    border-top-width: 0;
+}
+
 .table td {
     vertical-align: middle;
 }

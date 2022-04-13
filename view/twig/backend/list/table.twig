@@ -18,7 +18,7 @@
             {% endfor %}
             {% for style in styles %}
                 <th>
-                    {% if style.column.unordered %}
+                    {% if style.column.unordered or unordered %}
                         {{ label(style.column.i18n ?: style.i18n) }}
                     {% else %}
                         {% if not orders[style.name] %}

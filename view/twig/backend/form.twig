@@ -52,10 +52,35 @@
             </div>
         {% endif %}
     </div>
+    {% if result.sublist %}
+        <div class="card card-outline card-outline-tabs card-primary my-5 rounded-0">
+            <div class="border-bottom-0 card-header p-0">
+                <ul class="nav nav-tabs">
+                    {% for node, menu in result.sublist %}
+                        {% set count = data["#{node}:count"] %}
+                        <li class="nav-item">
+                            <a class="nav-link rounded-0 sublist" data-path="{{ menu.path }}" data-toggle="tab" href="#sublist-{{ menu.tab }}">
+                                {{ label(menu.i18n) }}{% if count is not null %}({{ count }}){% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                    {% for menu in result.sublist %}
+                        <div class="fade show tab-pane" id="sublist-{{ menu.tab }}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block postprocess %}
     {{ parent() }}
 
     initForm($("#_{{ formId }}"));
+
+    $("a[data-path][data-toggle=tab]").first().click();
 {% endblock %}

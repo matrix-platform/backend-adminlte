@@ -37,5 +37,6 @@ return [
     'overview' => 'backend/overview.twig',
     'password-changed' => 'backend/password-changed.twig',
     'password-form' => 'backend/password-form.twig',
+    'sublist' => 'backend/sublist.twig',
 
 ];

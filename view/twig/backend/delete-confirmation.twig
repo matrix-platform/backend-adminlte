@@ -26,6 +26,6 @@
 
 {% block postprocess %}
     $(".modal-wrapper .modal").modal().find("[data-submit]").on("click", function () {
-        perform("{{ controller.node }}", {args: {{ result.args|json_encode|raw }}, confirm: 1});
+        perform("{{ controller.node }}{{ form.sublist ? '?sublist=1' }}", {args: {{ result.args|json_encode|raw }}, confirm: 1});
     });
 {% endblock %}
