@@ -34,3 +34,7 @@
         unordered: true
     } only %}
 {% endblock %}
+
+{% block postprocess %}
+    $(`.sublist[href="#sublist-{{ formId }}"]`).html(`{{ label(controller.menu.i18n) }}({{ result.count }})`);
+{% endblock %}
