@@ -29,6 +29,7 @@ return [
     'deployment-modal' => 'backend/deployment-modal.twig',
     'form' => 'backend/form.twig',
     'form-modal' => 'backend/form/modal.twig',
+    'history' => 'backend/history.twig',
     'index' => 'backend/index.twig',
     'label' => 'backend/label.twig',
     'label-updated' => 'backend/label-updated.twig',

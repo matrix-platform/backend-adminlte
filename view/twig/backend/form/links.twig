@@ -1,0 +1,6 @@
+{% for type, link in links %}
+    {% set path = include(template_from_string(link.path), data, false) %}
+    <button class="btn btn-link pl-0" data-ajax="{{ path }}" data-form="#_{{ formId }}">
+        {{ label(link.i18n ?: "backend.#{type}") }}
+    </button>
+{% endfor %}

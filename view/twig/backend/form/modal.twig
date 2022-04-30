@@ -27,13 +27,28 @@
                     } only %}
                     <input name="form-type" type="hidden" value="modal">
                 </div>
-                <div class="justify-content-end modal-footer">
-                    {% include 'backend/form/buttons.twig' with {
-                        buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
-                        data: result.data,
-                        formId
-                    } only %}
-                </div>
+                {% if result.buttons or result.links %}
+                    <div class="justify-content-between modal-footer">
+                        <div>
+                            {% if result.links %}
+                                {% include 'backend/form/links.twig' with {
+                                    links: result.links|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                                    data: result.data,
+                                    formId
+                                } only %}
+                            {% endif %}
+                        </div>
+                        <div class="text-right">
+                            {% if result.buttons %}
+                                {% include 'backend/form/buttons.twig' with {
+                                    buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                                    data: result.data,
+                                    formId
+                                } only %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

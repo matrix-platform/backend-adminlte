@@ -78,12 +78,20 @@ th a, th:hover a {
     color: gray;
 }
 
+.modal-backdrop.fade {
+    opacity: 0;
+}
+
 .modal-body {
     overflow-y: auto;
 }
 
 .modal-content {
     max-height: calc(100vh - 3.5rem);
+}
+
+.modal.fade {
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-wrapper .operators {

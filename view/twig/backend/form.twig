@@ -41,14 +41,29 @@
             </div>
             <input name="r" type="hidden" value="{{ form.r }}">
         </div>
-        {% if result.buttons %}
-            <div class="card-footer text-right">
-                {% include 'backend/form/buttons.twig' with {
-                    backward: form.r,
-                    buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
-                    data,
-                    formId
-                } only %}
+        {% if result.buttons or result.links %}
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col">
+                        {% if result.links %}
+                            {% include 'backend/form/links.twig' with {
+                                links: result.links|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                                data,
+                                formId
+                            } only %}
+                        {% endif %}
+                    </div>
+                    <div class="col text-right">
+                        {% if result.buttons %}
+                            {% include 'backend/form/buttons.twig' with {
+                                backward: form.r,
+                                buttons: result.buttons|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+                                data,
+                                formId
+                            } only %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>

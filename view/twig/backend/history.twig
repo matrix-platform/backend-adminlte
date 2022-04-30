@@ -1,0 +1,64 @@
+{% extends 'backend/response.twig' %}
+
+{% block target %}.history-wrapper{% endblock %}
+
+{% block html %}
+    <div class="fade modal">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        {{ label(controller.menu.i18n) }}
+                        <span class="font-weight-normal h6 ml-2 text-secondary">
+                            {{ result.data['.title'] }}
+                            <span class="bg-warning border ml-3 px-2 py-1">{{ label('backend.history') }}</span>
+                        </span>
+                    </h3>
+                    <button class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="history-table table table-bordered table-responsive w-100">
+                        <thead>
+                            <tr>
+                                <th class="w-1">#</th>
+                                <th>{{ label('backend.log-type') }}</th>
+                                <th>{{ label('backend.log-time') }}</th>
+                                <th>{{ label('backend.username') }}</th>
+                                <th>{{ label('backend.ip-address') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in result.history %}
+                                <tr{% if log.type <= 3 %} data-widget="expandable-table" aria-expanded="false"{% endif %}>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ i18n("options/manipulation-type.#{log.type}") }}</td>
+                                    <td>{{ log.log_time }}</td>
+                                    <td>{{ log.user ? "@#{log.user}" : log.member }}</td>
+                                    <td>{{ log.ip }}</td>
+                                </tr>
+                                {% if log.type <= 3 %}
+                                    <tr class="expandable-body">
+                                        <td colspan="5">
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block postprocess %}
+    var modal = $(".history-wrapper .modal").modal();
+
+    modal.on("hidden.bs.modal", function () {
+        modal.remove();
+    });
+
+    $(".history-table", modal).ExpandableTable("init");
+{% endblock %}
