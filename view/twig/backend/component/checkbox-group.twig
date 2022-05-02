@@ -1,0 +1,10 @@
+{% set values = data[name] is null ? [] : string(data[name])|split(',') %}
+<div class="p-1">
+    {% for key, item in column.options %}
+        {% set inputId = "#{name}#{suffix}-#{key}" %}
+        <span class="d-block d-sm-inline icheck-default">
+            <input{% if key in values %} checked{% endif %} id="{{ inputId }}" name="{{ name }}{{ suffix }}" type="checkbox" value="{{ key }}">
+            <label class="mr-3 my-2 my-sm-0" for="{{ inputId }}">{{ item.title }}</label>
+        </span>
+    {% endfor %}
+</div>
