@@ -763,11 +763,8 @@
                 let options = target.find("[data-parent-id]");
 
                 select.on("change", function () {
-                    let removed = options.prop("selected", false).filter(`[data-parent-id!="${select.val()}"]`).remove();
-                    let selected = target.val();
-
-                    options.not(removed).appendTo(target).filter(`[value="${selected}"]`).prop("selected", true);
-                    target.trigger("change");
+                    let removed = options.filter(`[data-parent-id!="${select.val()}"]`).prop("selected", false).remove();
+                    target.append(options.not(removed)).trigger("change");
                 }).change();
             }).end().filter("[data-search]").on("change", function (event) {
                 let select = $(event.currentTarget);
