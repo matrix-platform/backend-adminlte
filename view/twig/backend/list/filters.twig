@@ -1,5 +1,5 @@
-<div class="card rounded-0">
-    <div class="card-body p-0" id="_{{ formId }}_filter">
+<form class="card rounded-0" data-search id="_{{ formId }}_filter">
+    <div class="card-body p-0">
         <div class="form-group pt-2 m-0 row">
             {% for style in filters %}
                 <div class="col-12 {{ style.search == 'between' ? 'col-md-8 col-lg-8 col-xl-6' : 'col-md-4 col-lg-4 col-xl-3' }} d-flex">
@@ -29,8 +29,8 @@
         </div>
     </div>
     <div class="card-footer p-2 text-right">
-        <button class="btn btn-flat {{ cfg('backend.button-search') }}" data-form="#_{{ formId }}_filter" data-search>
+        <button class="btn btn-flat {{ cfg('backend.button-search') }}" type="submit">
             {{ label('backend.search') }}
         </button>
     </div>
-</div>
+</form>

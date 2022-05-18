@@ -1,5 +1,5 @@
 <div class="mt-2">
-    <div class="d-flex" id="_{{ formId }}_filter">
+    <form class="d-flex" data-search id="_{{ formId }}_filter">
         <div class="mr-1">
             <select class="form-control select2bs4" data-search>
                 {% for style in filters %}
@@ -27,9 +27,9 @@
             {% endfor %}
         </div>
         <div>
-            <button class="btn btn-flat {{ cfg('backend.button-search') }}" data-form="#_{{ formId }}_filter" data-search title="{{ i18n('backend.search') }}">
+            <button class="btn btn-flat {{ cfg('backend.button-search') }}" title="{{ i18n('backend.search') }}" type="submit">
                 <i class="{{ cfg('backend.icon-search') }}"></i>
             </button>
         </div>
-    </div>
+    </form>
 </div>

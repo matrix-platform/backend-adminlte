@@ -950,8 +950,8 @@
 
             picker.after(`<input name="${name}${suffix}" type="hidden"><input name="${name}#filename${suffix}" type="hidden">`);
         }
-    }).delegate("button[data-search]", "click", function (event) {
-        let form = $(event.currentTarget).data("form");
+    }).delegate("form[data-search]", "submit", function (event) {
+        let form = `#${$(event.target).attr("id")}`;
         let data = serialize(form).data;
         let path = history.state.path;
         let search = {};
@@ -979,6 +979,8 @@
         }
 
         redirect({path}, false, {"form-id": form});
+
+        return false;
     }).delegate("button[data-upload]", "click", function (event) {
         let input = $(event.currentTarget).siblings("input");
 
