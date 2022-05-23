@@ -2,7 +2,11 @@
 
 {% set formId = random() %}
 
-{% block target %}.modal-wrapper{% endblock %}
+{% block preprocess %}
+    $("body").append("<div class=\"form-wrapper-{{ formId }}\"></div>");
+{% endblock %}
+
+{% block target %}.form-wrapper-{{ formId }}{% endblock %}
 
 {% block html %}
     <div class="fade modal">
@@ -55,11 +59,11 @@
 {% endblock %}
 
 {% block postprocess %}
-    var modal = $(".modal-wrapper .modal").modal();
+    var modal = $(".form-wrapper-{{ formId }} > .modal").modal();
 
     modal.on("hidden.bs.modal", function () {
         destroyForm(modal);
-        modal.remove();
+        modal.parent().remove();
     });
 
     initForm(modal);

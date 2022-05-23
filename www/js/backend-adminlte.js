@@ -401,7 +401,7 @@
             break;
         case "file-info":
             toastr.info(response.message);
-            $(".modal-wrapper .modal").modal("hide");
+            $(".modal").last().modal("hide");
             $(`button[data-ajax="file-info/${response.id}"]`).each(function (ignore, element) {
                 let wrapper = $(element).closest(".attachment-wrapper");
                 if (wrapper.hasClass("picture-wrapper")) {
@@ -431,7 +431,7 @@
             if (response.message) {
                 toastr.info(response.message);
             }
-            $(".modal-wrapper .modal").modal("hide");
+            $(".modal").modal("hide");
             redirect({path: response.path});
             break;
         case "refresh":
@@ -439,7 +439,7 @@
                 toastr.info(response.message);
             }
             if (response.modal) {
-                $(".modal-wrapper .modal").modal("hide");
+                $(".modal").last().modal("hide");
             }
             if (response.sublist) {
                 perform($(".active.sublist").data("path"), {});
@@ -468,13 +468,13 @@
         let expression = data.children("target").text().trim();
         let target;
 
+        execute(data.children("preprocess").text());
+
         if (expression) {
             target = $(expression);
         }
 
         if (!expression || target.length === 1) {
-            execute(data.children("preprocess").text());
-
             if (target) {
                 destroy(target);
 
@@ -833,7 +833,7 @@
 
     window.onpopstate = function (event) {
         $("a.cke_button__maximize.cke_button_on").click();
-        $(".ekko-lightbox, .modal-wrapper .modal").modal("hide");
+        $(".modal").modal("hide");
 
         perform(event.state.path, {});
     };

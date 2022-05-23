@@ -2,7 +2,11 @@
 
 {% set formId = random() %}
 
-{% block target %}.modal-wrapper{% endblock %}
+{% block preprocess %}
+    $("body").append("<div class=\"label-form-wrapper\"></div>");
+{% endblock %}
+
+{% block target %}.label-form-wrapper{% endblock %}
 
 {% block html %}
     <div class="fade modal">
@@ -34,10 +38,10 @@
 {% endblock %}
 
 {% block postprocess %}
-    var modal = $(".modal-wrapper .modal").modal();
+    var modal = $(".label-form-wrapper > .modal").modal();
 
     modal.on("hidden.bs.modal", function () {
-        modal.remove();
+        modal.parent().remove();
     });
 
     modal.find("textarea[name=content]").focus();

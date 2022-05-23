@@ -94,7 +94,7 @@ th a, th:hover a {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.modal-wrapper .operators {
+.modal .operators {
     display: none;
 }
 

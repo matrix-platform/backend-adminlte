@@ -1,6 +1,10 @@
 {% extends 'backend/response.twig' %}
 
-{% block target %}.modal-wrapper{% endblock %}
+{% block preprocess %}
+    $("body").append("<div class=\"confirmation-wrapper\"></div>");
+{% endblock %}
+
+{% block target %}.confirmation-wrapper{% endblock %}
 
 {% block html %}
     <div class="fade modal">
@@ -25,7 +29,13 @@
 {% endblock %}
 
 {% block postprocess %}
-    $(".modal-wrapper .modal").modal().find("[data-submit]").on("click", function () {
+    var modal = $(".confirmation-wrapper > .modal").modal();
+
+    modal.on("hidden.bs.modal", function () {
+        modal.parent().remove();
+    });
+
+    modal.find("[data-submit]").on("click", function () {
         perform("{{ controller.node }}{{ form.sublist ? '?sublist=1' }}", {args: {{ result.args|json_encode|raw }}, confirm: 1});
     });
 {% endblock %}

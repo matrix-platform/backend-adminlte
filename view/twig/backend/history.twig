@@ -1,5 +1,9 @@
 {% extends 'backend/response.twig' %}
 
+{% block preprocess %}
+    $("body").append("<div class=\"history-wrapper\"></div>");
+{% endblock %}
+
 {% block target %}.history-wrapper{% endblock %}
 
 {% block html %}
@@ -54,10 +58,10 @@
 {% endblock %}
 
 {% block postprocess %}
-    var modal = $(".history-wrapper .modal").modal();
+    var modal = $(".history-wrapper > .modal").modal();
 
     modal.on("hidden.bs.modal", function () {
-        modal.remove();
+        modal.parent().remove();
     });
 
     $(".history-table", modal).ExpandableTable("init");

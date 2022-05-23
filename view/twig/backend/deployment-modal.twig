@@ -2,7 +2,11 @@
 
 {% set formId = random() %}
 
-{% block target %}.modal-wrapper{% endblock %}
+{% block preprocess %}
+    $("body").append("<div class=\"deployment-wrapper\"></div>");
+{% endblock %}
+
+{% block target %}.deployment-wrapper{% endblock %}
 
 {% block html %}
     <div class="fade modal">
@@ -43,11 +47,11 @@
 {% endblock %}
 
 {% block postprocess %}
-    var modal = $(".modal-wrapper .modal").modal();
+    var modal = $(".deployment-wrapper > .modal").modal();
 
     modal.on("hidden.bs.modal", function () {
         Sortable.get(_{{ formId }}).destroy();
-        modal.remove();
+        modal.parent().remove();
     });
 
     Sortable.create(_{{ formId }}, {animation: 150});
