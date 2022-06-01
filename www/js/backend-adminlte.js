@@ -439,7 +439,7 @@
                 toastr.info(response.message);
             }
             if (response.modal) {
-                $(".modal").last().modal("hide");
+                $(".modal").modal("hide");
             }
             if (response.sublist) {
                 perform($(".active.sublist").data("path"), {});
@@ -763,8 +763,8 @@
                 let options = target.find("[data-parent-id]");
 
                 select.on("change", function () {
-                    let removed = options.filter(`[data-parent-id!="${select.val()}"]`).prop("selected", false).remove();
-                    target.append(options.not(removed)).trigger("change");
+                    let value = target.val();
+                    target.append(options.remove().filter(`[data-parent-id="${select.val()}"]`)).val(value).trigger("change");
                 }).change();
             }).end().filter("[data-search]").on("change", function (event) {
                 let select = $(event.currentTarget);
@@ -772,7 +772,7 @@
 
                 inputs.filter(":visible").addClass("d-none");
                 inputs.find("input").val("");
-                inputs.find("option:selected").prop("selected", false).closest("select").trigger("change");
+                inputs.find("select").val("").trigger("change");
                 inputs.filter(`[data-name="${select.val()}"]`).removeClass("d-none");
             });
         }
