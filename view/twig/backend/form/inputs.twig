@@ -16,7 +16,7 @@
                     {% if superuser %}<span class="hint">{{ local }}</span>{% endif %}
                     {% if data[local] is not defined %}{% set data = data|merge({(local): data[style.name]}) %}{% endif %}
                     {% include 'backend/component.twig' with {controller, data, style: style|merge({name: local})} only %}
-                    <span class="text-secondary text-xs">{{ label(column.remark ?: "#{style.i18n}.remark", '') }}</span>
+                    <span class="text-secondary text-xs">{{ label(column.remark ?: "#{style.i18n}.remark", '', data) }}</span>
                 </div>
             {% endif %}
         {% endfor %}
@@ -47,5 +47,5 @@
     <span class="invalid-feedback" data-name="{{ style.name }}"></span>
     {% if superuser %}<span class="hint">{{ style.name }}</span>{% endif %}
     {% include 'backend/component.twig' %}
-    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '') }}</span>
+    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '', data) }}</span>
 {% endmacro %}
