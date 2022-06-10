@@ -7,9 +7,7 @@
         }
     ],
     "license": "MIT",
-    "minimum-stability": "stable",
     "require": {
-        "almasaeed2010/adminlte": "^3.1",
-        "ckeditor/ckeditor": "dev-full/stable"
+        "almasaeed2010/adminlte": "^3.1"
     }
 }
