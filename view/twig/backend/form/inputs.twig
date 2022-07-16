@@ -27,7 +27,7 @@
             {% set groups = groups|merge([column.group]) %}
             <div class="row">
                 {% for item in styles|filter(s => s.column.group == column.group and not s.column.multilingual and s.type != 'hidden') %}
-                    <div class="col-12 col-md form-group">
+                    <div class="col-12 col-md{{ item.column.weight ? "-#{item.column.weight}" }} form-group">
                         {{ _self.input(controller, data, item, superuser) }}
                     </div>
                 {% endfor %}
@@ -42,7 +42,7 @@
 {% macro input(controller, data, style, superuser) %}
     <label>
         {% if style.required %}<span class="text-danger">*</span>{% endif %}
-        {{ label(style.column.i18n ?: style.i18n, style.name) }}
+        {{ style.label ?: label(style.column.i18n ?: style.i18n, style.name) }}
     </label>
     <span class="invalid-feedback" data-name="{{ style.name }}"></span>
     {% if superuser %}<span class="hint">{{ style.name }}</span>{% endif %}
