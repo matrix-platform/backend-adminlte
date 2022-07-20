@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="{{ i18n('locale.browser') }}">
+    <head>
+        <meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <meta content="initial-scale=1, width=device-width" name="viewport">
+        <title>{{ i18n('backend.title') }} | {{ i18n('backend.login-title') }}</title>
+        <base href="{{ constant('APP_PATH') }}">
+        <link href="favicon.ico" rel="icon">
+        <link href="adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
+        <link href="adminlte/plugins/toastr/toastr.min.css" rel="stylesheet">
+        <link href="adminlte/dist/css/adminlte.min.css" rel="stylesheet">
+        <link href="css/overlay.css" rel="stylesheet">
+        {%~ block stylesheet %}{% endblock %}
+    </head>
+    <body class="hold-transition login-page">
+        <div class="login-box">
+            <div class="login-logo">
+                {{ include(template_from_string(i18n('backend.login-logo'))) }}
+            </div>
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">
+                        {{ i18n('backend.login-message')|raw }}
+                    </p>
+                    <form>
+                        <div class="input-group mb-3">
+                            <input autofocus class="form-control rounded-0" name="username" placeholder="{{ i18n('backend.username') }}" required type="text">
+                            <div class="input-group-append"><div class="input-group-text rounded-0"><span class="fas fa-user"></span></div></div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input class="form-control rounded-0" name="password" placeholder="{{ i18n('backend.password') }}" required type="password">
+                            <div class="input-group-append"><div class="input-group-text rounded-0"><span class="fas fa-lock"></span></div></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-block btn-flat btn-primary" type="submit">{{ i18n('backend.login-submit') }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-wrapper" style="display: none;"><i class="fas fa-10x fa-circle-notch fa-spin text-light"></i></div>
+        <script src="adminlte/plugins/jquery/jquery.min.js"></script>
+        <script src="adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="adminlte/plugins/toastr/toastr.min.js"></script>
+        <script src="adminlte/dist/js/adminlte.min.js"></script>
+        <script src="js/{{ cfg('system.csrf-token-type') }}-token.js"></script>
+        <script>
+            $("form").submit(function () {
+                var overlay = $(".overlay-wrapper");
+
+                if (overlay.is(":hidden")) {
+                    var data = {
+                        username: $("input[name=username]").val(),
+                        password: $("input[name=password]").val()
+                    };
+
+                    overlay.show();
+
+                    $.ajax({
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        type: "POST",
+                        url: "{{ constant('APP_ROOT') }}{{ cfg('backend.folder') ?: 'backend' }}/user/login"
+                    }).done(function (response) {
+                        if (response.success) {
+                            location.replace("{{ result.path }}");
+                        } else {
+                            toastr.error(response.message || response.error);
+                            overlay.hide();
+                        }
+                    }).fail(function (response) {
+                        toastr.error(response.statusText);
+                        overlay.hide();
+                    });
+                }
+
+                return false;
+            });
+        </script>
+    </body>
+</html>
