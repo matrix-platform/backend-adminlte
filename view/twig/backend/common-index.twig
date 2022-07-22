@@ -1,4 +1,4 @@
-{% set editor, folder, language, languages, map_key, prefix = cfg('backend.editor'), cfg('backend.folder') ?: 'backend', constant('LANGUAGE'), cfg('system.languages')|split('|'), cfg('system.google-map-api-key'), constant('APP_PATH') %}
+{% set editor, folder, language, languages, map_key, prefix, version = cfg('backend.editor'), cfg('backend.folder') ?: 'backend', constant('LANGUAGE'), cfg('system.languages')|split('|'), cfg('system.google-map-api-key'), constant('APP_PATH'), version() %}
 <!DOCTYPE HTML>
 <html lang="{{ i18n('locale.browser') }}">
     <head>
@@ -22,8 +22,8 @@
         <link href="{{ prefix }}adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
         <link href="{{ prefix }}adminlte/plugins/toastr/toastr.min.css" rel="stylesheet">
         <link href="{{ prefix }}css/jquery.floatingscroll.css" rel="stylesheet">
-        <link href="{{ prefix }}css/backend-adminlte.css" rel="stylesheet">
-        <link href="{{ prefix }}css/backend-custom.css" rel="stylesheet">
+        <link href="{{ prefix }}css/backend-adminlte.css?{{ version }}" rel="stylesheet">
+        <link href="{{ prefix }}css/backend-custom.css?{{ version }}" rel="stylesheet">
     </head>
     <body class="hold-transition layout-fixed layout-footer-fixed layout-navbar-fixed">
         <div class="wrapper">
@@ -120,9 +120,9 @@
 {% endif %}
         <script src="{{ prefix }}js/underscore-umd-min.js"></script>
         {%~ block script %}{% endblock %}
-        <script src="{{ prefix }}js/label-editor.js"></script>
-        <script src="{{ prefix }}js/{{ cfg('system.csrf-token-type') }}-token.js"></script>
-        <script src="locale.js"></script>
-        <script data-language="{{ language }}" data-max-file-count="{{ result.max_file_uploads }}" data-max-file-size="{{ result.upload_max_filesize }}" data-max-post-size="{{ result.post_max_size }}" data-path="{{ controller.args()|join('/') }}" src="{{ prefix }}js/backend-adminlte.js"></script>
+        <script src="{{ prefix }}js/label-editor.js?{{ version }}"></script>
+        <script src="{{ prefix }}js/{{ cfg('system.csrf-token-type') }}-token.js?{{ version }}"></script>
+        <script src="locale.js?{{ version }}"></script>
+        <script data-language="{{ language }}" data-max-file-count="{{ result.max_file_uploads }}" data-max-file-size="{{ result.upload_max_filesize }}" data-max-post-size="{{ result.post_max_size }}" data-path="{{ controller.args()|join('/') }}" src="{{ prefix }}js/backend-adminlte.js?{{ version }}"></script>
     </body>
 </html>

@@ -1,3 +1,4 @@
+{% set version = version() %}
 <!DOCTYPE HTML>
 <html lang="{{ i18n('locale.browser') }}">
     <head>
@@ -10,7 +11,7 @@
         <link href="adminlte/plugins/fontawesome-free/css/all.min.css" rel="stylesheet">
         <link href="adminlte/plugins/toastr/toastr.min.css" rel="stylesheet">
         <link href="adminlte/dist/css/adminlte.min.css" rel="stylesheet">
-        <link href="css/overlay.css" rel="stylesheet">
+        <link href="css/overlay.css?{{ version }}" rel="stylesheet">
         {%~ block stylesheet %}{% endblock %}
     </head>
     <body class="hold-transition login-page">
@@ -46,7 +47,7 @@
         <script src="adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="adminlte/plugins/toastr/toastr.min.js"></script>
         <script src="adminlte/dist/js/adminlte.min.js"></script>
-        <script src="js/{{ cfg('system.csrf-token-type') }}-token.js"></script>
+        <script src="js/{{ cfg('system.csrf-token-type') }}-token.js?{{ version }}"></script>
         <script>
             $("form").submit(function () {
                 var overlay = $(".overlay-wrapper");
