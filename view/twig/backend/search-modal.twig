@@ -1,0 +1,58 @@
+{% extends 'backend/response.twig' %}
+
+{% set formId = random() %}
+
+{% block preprocess %}
+    $("body").append("<div class=\"search-wrapper\"></div>");
+{% endblock %}
+
+{% block target %}.search-wrapper{% endblock %}
+
+{% block html %}
+    <div class="fade modal">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ label(controller.permitted(form.path).i18n) }}</h5>
+                    <button class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <form class="d-flex p-3" id="_{{ formId }}">
+                    <div class="flex-grow-1">
+                        <div class="input-group">
+                            <input class="form-control rounded-0" name="keyword" type="text"/>
+                        </div>
+                    </div>
+                    <div class="ml-1">
+                        <button class="btn btn-default btn-flat" title="{{ i18n('backend.search') }}" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="modal-body pt-0" id="_{{ formId }}-list"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block postprocess %}
+    var modal = $(".search-wrapper > .modal").modal();
+
+    modal.find("form").submit(function () {
+        let form = "#_{{ formId }}";
+        let options = {parameters: {"form-id": form}};
+
+        perform("{{ form.path }}", form, options);
+
+        return false;
+    });
+
+    modal.on("hidden.bs.modal", function () {
+        modal.parent().remove();
+    });
+
+    {% if not form.passive %}
+        $("#_{{ formId }}").submit();
+    {% endif %}
+{% endblock %}

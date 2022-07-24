@@ -1,5 +1,5 @@
 /*global $,Sortable,_,atob,btoa,google,history,i18n,toastr*/
-/*jslint browser,long*/
+/*jslint browser,long,nomen*/
 
 (function () {
 
@@ -881,7 +881,13 @@
             $($(event.relatedTarget).attr("href")).empty();
         }
 
-        perform($(event.target).data('path'), {});
+        perform($(event.target).data("path"), {});
+    }).delegate("a[data-picker]", "click", function (event) {
+        let button = $(event.currentTarget);
+
+        $(`input[data-node="${button.data("node")}"]`).val(button.data("title")).siblings("input").val(button.data("picker"));
+
+        $(".modal").modal("hide");
     }).delegate("a[data-toggle=lightbox]", "click", function (event) {
         $(event.currentTarget).ekkoLightbox();
 

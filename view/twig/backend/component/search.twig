@@ -1,0 +1,13 @@
+<div class="d-flex">
+    <div class="flex-grow-1">
+        <div class="input-group">
+            <input class="form-control rounded-0" data-node="{{ column.path }}" readonly type="text" value="{{ data[column.title] }}"/>
+            {% include 'backend/component/hidden.twig' %}
+        </div>
+    </div>
+    <div class="ml-1">
+        <button class="btn btn-default btn-flat" data-ajax="search-modal?path={{ column.path }}{{ column.passive ? '&passive=1' }}" title="{{ i18n('backend.search') }}">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>

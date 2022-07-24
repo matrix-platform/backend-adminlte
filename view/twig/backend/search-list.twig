@@ -1,0 +1,17 @@
+{% extends 'backend/response.twig' %}
+
+{% block target %}{{ form['form-id'] }}-list{% endblock %}
+
+{% block html %}
+    {% include 'backend/list/table.twig' with {
+        actions: result.actions|filter(v => v)|sort((a, b) => a.ranking <=> b.ranking),
+        controller,
+        formId: random(),
+        list: result.data,
+        page: 1,
+        size: 0,
+        styles: result.styles,
+        switches: [],
+        unordered: true
+    } only %}
+{% endblock %}

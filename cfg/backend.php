@@ -8,6 +8,7 @@ return [
     'button-delete' => 'btn-danger',
     'button-insert' => 'btn-info',
     'button-next' => 'btn-info',
+    'button-picker' => 'btn-default',
     'button-search' => 'btn-default',
     'button-update' => 'btn-info',
     'button-view' => 'btn-default',
@@ -21,6 +22,7 @@ return [
     'icon-link' => 'fas fa-external-link-alt',
     'icon-mail' => 'far fa-envelope',
     'icon-new' => 'fas fa-plus',
+    'icon-picker' => 'fas fa-check',
     'icon-search' => 'fas fa-search',
     'icon-view' => 'fas fa-pen',
     'icon-youtube' => 'fab fa-youtube',
@@ -38,6 +40,8 @@ return [
     'overview' => 'backend/overview.twig',
     'password-changed' => 'backend/password-changed.twig',
     'password-form' => 'backend/password-form.twig',
+    'search-list' => 'backend/search-list.twig',
+    'search-modal' => 'backend/search-modal.twig',
     'sublist' => 'backend/sublist.twig',
 
 ];
