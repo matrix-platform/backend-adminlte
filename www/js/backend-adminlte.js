@@ -151,6 +151,12 @@
     };
 
     let destroy = function (target) {
+        target.find("*").each(function (ignore, element) {
+            if (element.hasOwnProperty("__vue_app__")) {
+                element.__vue_app__.unmount();
+            }
+        });
+
         target.find("div.attachment-container, div.options-checked").each(function (ignore, element) {
             Sortable.get(element).destroy();
         });
@@ -887,7 +893,7 @@
 
         $(`input[data-node="${button.data("node")}"]`).val(button.data("title")).siblings("input").val(button.data("picker"));
 
-        $(".modal").modal("hide");
+        button.parents(".modal").modal("hide");
     }).delegate("a[data-toggle=lightbox]", "click", function (event) {
         $(event.currentTarget).ekkoLightbox();
 
