@@ -846,6 +846,8 @@
 
     window.perform = perform;
 
+    window.redirect = redirect;
+
     window.toggleMenu = function (name) {
         name = name || $(".breadcrumb-item[data-menu]").first().data("menu");
 
@@ -891,7 +893,7 @@
     }).delegate("a[data-picker]", "click", function (event) {
         let button = $(event.currentTarget);
 
-        $(`input[data-node="${button.data("node")}"]`).val(button.data("title")).siblings("input").val(button.data("picker"));
+        $(`input[data-node="${button.data("node")}"]`).val(button.data("title")).siblings("input").val(button.data("picker")).trigger("change");
 
         button.parents(".modal").modal("hide");
     }).delegate("a[data-toggle=lightbox]", "click", function (event) {
