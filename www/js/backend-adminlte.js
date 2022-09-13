@@ -429,6 +429,9 @@
             break;
         case "message":
             toastr.info(response.message);
+            if (response.modal) {
+                $(".modal").modal("hide");
+            }
             break;
         case "open":
             window.open(response.path);
@@ -892,8 +895,13 @@
         perform($(event.target).data("path"), {});
     }).delegate("a[data-picker]", "click", function (event) {
         let button = $(event.currentTarget);
+        let path = button.data("nextPath");
 
-        $(`input[data-node="${button.data("node")}"]`).val(button.data("title")).siblings("input").val(button.data("picker")).trigger("change");
+        if (path) {
+            redirect({path});
+        } else {
+            $(`input[data-node="${button.data("node")}"]`).val(button.data("title")).siblings("input").val(button.data("picker")).trigger("change");
+        }
 
         button.parents(".modal").modal("hide");
     }).delegate("a[data-toggle=lightbox]", "click", function (event) {
@@ -940,7 +948,7 @@
             $(".invalid-feedback", form).hide().empty();
             options = {parameters: {"form-id": form}};
         } else {
-            form = {args: button.data("args")};
+            form = {args: button.data("args"), refresh: !button.is("[data-no-refresh]")};
         }
 
         perform(button.data("ajax"), form, options);

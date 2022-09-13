@@ -30,6 +30,7 @@
                         styles: result.styles
                     } only %}
                     <input name="form-type" type="hidden" value="modal">
+                    <input name="refresh-after-save" type="hidden" value="{{ form.refresh }}">
                 </div>
                 {% if result.buttons or result.links %}
                     <div class="justify-content-between modal-footer">

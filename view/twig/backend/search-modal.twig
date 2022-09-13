@@ -41,7 +41,7 @@
 
     modal.find("form").submit(function () {
         let form = "#_{{ formId }}";
-        let options = {parameters: {"form-id": form}};
+        let options = {parameters: {"form-id": form, "next-path": "{{ form['next-path'] }}"}};
 
         perform("{{ form.path }}", form, options);
 
