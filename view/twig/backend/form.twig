@@ -13,8 +13,8 @@
 {% block header %}
     {% include 'backend/content-header.twig' with {
         breadcrumbs: result.breadcrumbs,
-        description: result.subtitle,
-        title: label(controller.menu.i18n)
+        description: result.head.subtitle ?: result.subtitle,
+        title: result.head.title ?: label(controller.menu.i18n)
     } only %}
 {% endblock %}
 
