@@ -400,6 +400,9 @@
             if (response.message) {
                 toastr.info(response.message);
             }
+            if (response.modal) {
+                $(".modal").modal("hide");
+            }
             backward(response.backward);
             break;
         case "download":
@@ -730,6 +733,7 @@
             let input = $(element);
 
             input.daterangepicker({
+                autoApply: true,
                 autoUpdateInput: false,
                 locale: {format: input.data("pattern")},
                 showDropdowns: true,
