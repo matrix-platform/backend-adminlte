@@ -1,7 +1,7 @@
 <div class="d-flex">
     <div class="flex-grow-1">
         <div class="input-group">
-            <input class="form-control rounded-0" data-node="{{ column.path }}" readonly type="text" value="{{ data[column.title] }}"/>
+            <input class="form-control rounded-0" data-generated data-node="{{ column.path }}" readonly type="text" value="{{ data[column.title] }}"/>
             {% include 'backend/component/hidden.twig' %}
         </div>
     </div>

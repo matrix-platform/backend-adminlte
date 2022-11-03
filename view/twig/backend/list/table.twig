@@ -11,7 +11,7 @@
                 </th>
             {% endif %}
             {% if actions %}
-                <th class="w-1">{{ label('backend.operation') }}</th>
+                <th class="list-actions w-1">{{ label('backend.operation') }}</th>
             {% endif %}
             {% for type in switches|keys %}
                 <th class="w-1">{{ label("backend.#{type}") }}</th>
@@ -52,7 +52,7 @@
                     </td>
                 {% endif %}
                 {% if actions %}
-                    <td>
+                    <td class="list-actions">
                         {% for type, action in actions %}
                             {% set button = cfg("backend.button-#{type}") %}
                             {% set icon = cfg("backend.icon-#{type}") %}

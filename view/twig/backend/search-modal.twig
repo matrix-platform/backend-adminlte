@@ -21,7 +21,7 @@
                 <form class="d-flex p-3" id="_{{ formId }}">
                     <div class="flex-grow-1">
                         <div class="input-group">
-                            <input class="form-control rounded-0" name="keyword" type="text"/>
+                            <input class="form-control rounded-0" name="keyword" type="text" value="{{ form.args.keyword }}" />
                         </div>
                     </div>
                     <div class="ml-1">
@@ -50,6 +50,10 @@
 
     modal.on("hidden.bs.modal", function () {
         modal.parent().remove();
+    });
+
+    modal.one("shown.bs.modal", function () {
+        modal.find("input[name=keyword]").focus();
     });
 
     {% if not form.passive %}
