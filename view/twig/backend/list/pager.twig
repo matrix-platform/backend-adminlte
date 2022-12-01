@@ -1,7 +1,7 @@
 {% set max = (count / size)|round(0, 'ceil') %}
 <div class="card-footer">
     <div class="float-left my-2 text-muted">
-        {% with {count: count, page: block('page', 'backend/list/blocks.twig'), size: block('size', 'backend/list/blocks.twig')} only %}
+        {% with {count, max, page: block('page', 'backend/list/blocks.twig'), size: block('size', 'backend/list/blocks.twig')} only %}
             {{ include(template_from_string(label('backend.list-rows'))) }}
         {% endwith %}
     </div>
