@@ -13,7 +13,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content rounded-0">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ form.title ?: label(controller.permitted(form.path).i18n) }}</h5>
+                    <h5 class="modal-title">{{ form.title ?: label(controller.permitted(form.path|split('?')|first).i18n) }}</h5>
                     <button class="close" data-dismiss="modal">
                         <span>&times;</span>
                     </button>
