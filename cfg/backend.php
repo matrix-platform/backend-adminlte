@@ -9,6 +9,7 @@ return [
     'button-insert' => 'btn-info',
     'button-next' => 'btn-info',
     'button-picker' => 'btn-default',
+    'button-resend' => 'btn-info',
     'button-search' => 'btn-default',
     'button-update' => 'btn-info',
     'button-view' => 'btn-default',

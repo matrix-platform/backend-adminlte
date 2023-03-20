@@ -4,7 +4,7 @@ cp -R ${folder}/www .
 
 rm -rf www/adminlte www/js/ckeditor
 mkdir -p www/adminlte
-cp -R vendor/almasaeed2010/adminlte/{dist,plugins} www/adminlte
+cp -R vendor/almasaeed2010/adminlte/dist vendor/almasaeed2010/adminlte/plugins www/adminlte
 cp -R vendor/ckeditor/ckeditor www/js
 
 touch www/css/backend-custom.css www/css/ckeditor.css
