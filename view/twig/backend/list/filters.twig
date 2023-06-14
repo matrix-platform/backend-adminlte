@@ -4,7 +4,7 @@
             {% for style in filters %}
                 <div class="col-12 {{ style.search == 'between' ? 'col-md-8 col-lg-8 col-xl-6' : 'col-md-4 col-lg-4 col-xl-3' }} d-flex">
                     <label class="col-form-label ml-1 mr-3 text-nowrap">
-                        {{ label(style.column.i18n ?: style.i18n) }}
+                        {{ label(style.column.i18n) }}
                     </label>
                     <div class="flex-grow-1 ml-1">
                         <div class="row">

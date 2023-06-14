@@ -4,7 +4,7 @@
             <select class="form-control select2bs4" data-search>
                 {% for style in filters %}
                     <option value="{{ style.name }}"{{ style.selected ? ' selected' }}>
-                        {{- i18n(style.column.i18n ?: style.i18n) -}}
+                        {{- i18n(style.column.i18n) -}}
                     </option>
                 {% endfor %}
             </select>

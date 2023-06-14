@@ -10,13 +10,13 @@
                 <div class="form-group">
                     <label>
                         {% if style.required %}<span class="text-danger">*</span>{% endif %}
-                        {{ label(column.i18n ?: style.i18n, local) }} ({{ cfg("i18n/#{lang}.title") }})
+                        {{ label(column.i18n, local) }} ({{ cfg("i18n/#{lang}.title") }})
                     </label>
                     <span class="invalid-feedback" data-name="{{ local }}"></span>
                     {% if superuser %}<span class="hint">{{ local }}</span>{% endif %}
                     {% if data[local] is not defined %}{% set data = data|merge({(local): data[style.name]}) %}{% endif %}
                     {% include 'backend/component.twig' with {controller, data, style: style|merge({name: local})} only %}
-                    <span class="text-secondary text-xs">{{ label(column.remark ?: "#{style.i18n}.remark", '', data) }}</span>
+                    <span class="text-secondary text-xs">{{ label(column.remark ?: "#{column.i18n}.remark", '', data) }}</span>
                 </div>
             {% endif %}
         {% endfor %}
@@ -42,10 +42,10 @@
 {% macro input(controller, data, style, superuser) %}
     <label>
         {% if style.required %}<span class="text-danger">*</span>{% endif %}
-        {{ style.label ?: label(style.column.i18n ?: style.i18n, style.name) }}
+        {{ style.label ?: label(style.column.i18n, style.name) }}
     </label>
     <span class="invalid-feedback" data-name="{{ style.name }}"></span>
     {% if superuser %}<span class="hint">{{ style.name }}</span>{% endif %}
     {% include 'backend/component.twig' %}
-    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.i18n}.remark", '', data) }}</span>
+    <span class="text-secondary text-xs">{{ label(style.column.remark ?: "#{style.column.i18n}.remark", '', data) }}</span>
 {% endmacro %}

@@ -19,7 +19,7 @@
             {% for style in styles %}
                 <th>
                     {% if style.column.unordered or unordered %}
-                        {{ label(style.column.i18n ?: style.i18n) }}
+                        {{ label(style.column.i18n) }}
                     {% else %}
                         {% if not orders[style.name] %}
                             {% set icon, order = 'fas fa-sort', style.name %}
@@ -29,7 +29,7 @@
                             {% set icon, order = 'fas fa-sort-down', null %}
                         {% endif %}
                         <a data-ajax href="{{ build(path, parameters, {o: order}) }}">
-                            {{ label(style.column.i18n ?: style.i18n) }}
+                            {{ label(style.column.i18n) }}
                             <i class="{{ icon }} ml-2"></i>
                         </a>
                     {% endif %}
