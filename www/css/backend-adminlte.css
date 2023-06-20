@@ -40,6 +40,10 @@ th a, th:hover a {
     border: 3px solid var(--info) !important;
 }
 
+.daterangepicker {
+    z-index: auto;
+}
+
 .daterangepicker select {
     vertical-align: middle;
 }

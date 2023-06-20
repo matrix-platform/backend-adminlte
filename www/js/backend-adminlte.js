@@ -731,11 +731,18 @@
 
         form.find("input[data-format=date],input[data-format=datetime]").each(function (ignore, element) {
             let input = $(element);
+            let parent;
+
+            if (!form.parents(".content-wrapper").length) {
+                parent = input.parent();
+            }
 
             input.daterangepicker({
                 autoApply: true,
                 autoUpdateInput: false,
+                drops: "auto",
                 locale: {format: input.data("pattern")},
+                parentEl: parent,
                 showDropdowns: true,
                 singleDatePicker: true,
                 timePicker: input.data("format").indexOf("time") >= 0,
