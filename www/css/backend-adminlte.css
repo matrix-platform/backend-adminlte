@@ -165,6 +165,21 @@ th a, th:hover a {
     background-color: azure;
 }
 
+.tagify {
+    gap: 5px;
+    padding: 5px;
+    width: 100%;
+}
+
+.tagify__input {
+    padding-left: 0;
+}
+
+.tagify__input, .tagify__tag {
+    line-height: 20px;
+    margin: 0;
+}
+
 .wrapper .main-sidebar {
     background-image: url(img/always-grey.png);
 }

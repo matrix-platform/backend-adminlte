@@ -165,6 +165,10 @@
             $(element).data("colorpicker").destroy();
         });
 
+        target.find("div[data-format=tag]").each(function (ignore, element) {
+            $(element).data("tagify").destroy();
+        });
+
         target.find("div[data-format=time]").each(function (ignore, element) {
             $(element).datetimepicker("destroy");
         });
@@ -754,6 +758,19 @@
         });
 
         form.find("input[data-format=attachment]").on("change", attachment);
+
+        form.find("textarea[data-format=tag]").each(function (ignore, element) {
+            let input = $(element);
+
+            input.tagify({
+                dropdown: {enabled: 1},
+                editTags: false,
+                originalInputValueFormat(tags) {
+                    return tags.map((item) => item.value);
+                },
+                whitelist: input.data("options").split(",")
+            });
+        });
 
         form.find("textarea[rows]").each(function (ignore, element) {
             if (element.scrollHeight) {

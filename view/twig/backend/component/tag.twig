@@ -1,0 +1,9 @@
+<div>
+    <textarea data-format="tag" data-options="{{ column.options ? column.options|map(value => value.title)|join(',') }}" name="{{ name }}{{ suffix }}"
+
+        {%- if disabled %} disabled{% endif -%}
+
+        {%- if placeholder %} placeholder="{{ placeholder }}"{% endif -%}
+
+    >{{ data[name] }}</textarea>
+</div>
