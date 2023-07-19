@@ -1077,7 +1077,11 @@
         let checkbox = $(event.currentTarget).prop("disabled", true);
         let value = checkbox.prop("checked");
 
-        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}, {overlay: false}).fail(function () {
+        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}, {overlay: false}).done(function (data) {
+            if (!data.success) {
+                checkbox.prop("checked", !value);
+            }
+        }).fail(function () {
             checkbox.prop("checked", !value);
         }).always(function () {
             checkbox.prop("disabled", false);
