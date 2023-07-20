@@ -2,7 +2,7 @@
     {% if readonly %}
         {% include "backend/component/readonly/#{type}.twig" %}
     {% else %}
-        {% set placeholder = placeholder ?: i18n(column.placeholder ?: "#{i18n}.placeholder", '') %}
+        {% set placeholder = placeholder ?: i18n(column.placeholder ?: "#{column.i18n}.placeholder", '') %}
         {% include "backend/component/#{type}.twig" %}
     {% endif %}
 {% endwith %}

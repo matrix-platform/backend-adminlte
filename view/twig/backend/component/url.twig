@@ -1,4 +1,8 @@
-{% include 'backend/component/input.twig' with {
-    type: 'url',
-    value: data[name]
-} %}
+{% if column.embed %}
+    <div class="border position-relative w-100" style="height:800px">
+        <iframe class="border-0 h-100 w-100" onload="javascript:$(this).next().hide()" src="{{ data[name] }}"></iframe>
+        <div class="iframe-overlay position-absolute bg-light"><i class="fas fa-4x fa-spinner fa-spin text-secondary"></i></div>
+    </div>
+{% else %}
+    {% include 'backend/component/input.twig' with {type: 'url', value: data[name]} %}
+{% endif %}
