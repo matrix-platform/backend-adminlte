@@ -411,6 +411,9 @@
             break;
         case "download":
             download(response);
+            if (response.refresh) {
+                perform(history.state.path, {});
+            }
             break;
         case "file-info":
             toastr.info(response.message);
