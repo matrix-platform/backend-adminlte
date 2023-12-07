@@ -3,8 +3,8 @@
     <div class="{% if multiple %}attachment-container picture-container{% else %}d-inline-block{% endif %}">
         {% for path in paths %}
             {% set href, info = path|img, file(path) %}
-            <div class="attachment-wrapper picture-wrapper">
-                <div class="picture-preview">
+            <div class="attachment-wrapper picture-wrapper"{% if column.width %} style="{{ "width:#{column.width}px" }}"{% endif %}>
+                <div class="picture-preview"{% if column.height %} style="{{ "height:#{column.height}px" }}"{% endif %}>
                     <a data-toggle="lightbox" data-type="image" href="{{ href }}" title="{{ info.description }}">
                         <img alt="{{ info.name }}" src="{{ href }}">
                     </a>
