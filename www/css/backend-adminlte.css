@@ -29,7 +29,10 @@ th a, th:hover a {
 .deploy-item {
     background-color: white;
     height: 50px;
+    overflow: hidden;
     padding: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .deploy-item:not(:first-child) {

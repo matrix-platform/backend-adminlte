@@ -10,7 +10,7 @@
 
 {% block html %}
     <div class="fade modal">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered{% if result.image %} modal-xl{% endif %}">
             <div class="modal-content rounded-0">
                 <div class="modal-header">
                     <h3 class="modal-title">
@@ -24,16 +24,34 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="_{{ formId }}">
-                        {% for item in result.data %}
-                            <div class="border deploy-item">
-                                <span>{{ item.title }}</span>
-                                <input name="id" type="hidden" value="{{ item.id }}">
-                            </div>
-                        {% endfor %}
-                        <input name="form-type" type="hidden" value="modal">
-                        <input name="refresh-after-save" type="hidden" value="1">
-                    </div>
+                    {% if result.image %}
+                        <div class="attachment-container picture-container" id="_{{ formId }}">
+                            {% for item in result.data %}
+                                <div class="picture-wrapper">
+                                    <div class="picture-preview">
+                                        <a>
+                                            <img src="{{ item[result.image]|img }}">
+                                        </a>
+                                    </div>
+                                    <input name="id" type="hidden" value="{{ item.id }}">
+                                </div>
+                            {% endfor %}
+                            {% for i in 1..10 %}<div class="picture-fill"></div>{% endfor %}
+                            <input name="form-type" type="hidden" value="modal">
+                            <input name="refresh-after-save" type="hidden" value="1">
+                        </div>
+                    {% else %}
+                        <div id="_{{ formId }}">
+                            {% for item in result.data %}
+                                <div class="border deploy-item">
+                                    {{ item.title }}
+                                    <input name="id" type="hidden" value="{{ item.id }}">
+                                </div>
+                            {% endfor %}
+                            <input name="form-type" type="hidden" value="modal">
+                            <input name="refresh-after-save" type="hidden" value="1">
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="justify-content-end modal-footer">
                     {% include 'backend/form/buttons.twig' with {
