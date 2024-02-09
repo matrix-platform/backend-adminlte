@@ -865,7 +865,8 @@
                     enterMode: window.CKEDITOR.ENTER_BR,
                     filebrowserImageUploadUrl: "file/upload-file",
                     shiftEnterMode: window.CKEDITOR.ENTER_P,
-                    uploadUrl: "file/upload-file"
+                    uploadUrl: "file/upload-file",
+                    versionCheck: false
                 });
             });
         }
