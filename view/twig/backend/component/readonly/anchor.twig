@@ -1,8 +1,10 @@
-{% set href = include(template_from_string(column.href), data, false) %}
-{% if href matches '/^https?:\\/\\//' %}
-    <a href="{{ href }}" target="_blank">{{ data[name] }}</a>
-{% elseif column.link %}
-    <a href="{{ href }}">{{ data[name] }}</a>
-{% else %}
-    <button class="btn btn-link p-0" data-ajax="{{ href }}" data-args="modal">{{ data[name] }}</button>
-{% endif %}
+<div class="py-2">
+    {% set href = include(template_from_string(column.href), data, false) %}
+    {% if href matches '/^https?:\\/\\//' %}
+        <a href="{{ href }}" target="_blank">{{ data[name] }}</a>
+    {% elseif column.link %}
+        <a href="{{ href }}">{{ data[name] }}</a>
+    {% else %}
+        <button class="btn btn-link p-0" data-ajax="{{ href }}" data-args="modal">{{ data[name] }}</button>
+    {% endif %}
+</div>
