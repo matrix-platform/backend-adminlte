@@ -1,8 +1,8 @@
-{% set groups, superuser = [], constant('USER_ID') == 1 %}
+{% set groups, languages, superuser = [], constant('LANGUAGES'), constant('USER_ID') == 1 %}
 {% for style in styles %}
     {% set column = style.column %}
     {% if column.multilingual %}
-        {% for lang in constant('LANGUAGES') %}
+        {% for lang in languages %}
             {% set local = "#{style.name}__#{lang}" %}
             {% if style.type == 'hidden' %}
                 {% include 'backend/component/hidden.twig' with {data, name: local} only %}
@@ -10,7 +10,8 @@
                 <div class="form-group">
                     <label>
                         {% if style.required %}<span class="text-danger">*</span>{% endif %}
-                        {{ label(column.i18n, local) }} ({{ cfg("i18n/#{lang}.title") }})
+                        {{ label(column.i18n, local) }}
+                        {% if languages|length > 1 %}({{ cfg("i18n/#{lang}.title") }}){% endif %}
                     </label>
                     <span class="invalid-feedback" data-name="{{ local }}"></span>
                     {% if superuser %}<span class="hint">{{ local }}</span>{% endif %}
