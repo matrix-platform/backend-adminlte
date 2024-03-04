@@ -861,9 +861,12 @@
                     allowedContent: true,
                     baseHref: document.baseURI.match(/^(.*\/)(\w+\/)$/)[1],
                     bodyClass: editor.data("editorClass") || "ckeditor-body",
+                    clipboard_handleImages: false,
                     contentsCss: "css/ckeditor.css",
                     enterMode: window.CKEDITOR.ENTER_BR,
+                    exportPdf_tokenUrl: "n/a",
                     filebrowserImageUploadUrl: "file/upload-file",
+                    removeButtons: "ExportPdf",
                     shiftEnterMode: window.CKEDITOR.ENTER_P,
                     uploadUrl: "file/upload-file",
                     versionCheck: false
