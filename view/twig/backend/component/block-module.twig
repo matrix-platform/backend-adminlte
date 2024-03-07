@@ -1,0 +1,13 @@
+{% set prefix, value = constant('APP_PATH'), string(data[name]) %}
+<div class="block-modules p-1">
+    {% for key, item in column.options %}
+        {% set id = "#{key}-#{random()}" %}
+        <label class="d-block">
+            <img alt="" class="d-block w-100" src="{{ prefix }}assets/block-module/{{ key }}.png" style="cursor:pointer">
+            <span class="icheck-primary">
+                <input id="{{ id }}" name="{{ name }}{{ suffix }}" type="radio" value="{{ key }}" />
+                <label class="mb-2 mr-3" for="{{ id }}">{{ item.title }}</label>
+            </span>
+        </label>
+    {% endfor %}
+</div>

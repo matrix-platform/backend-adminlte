@@ -737,17 +737,20 @@
         });
 
         form.find("input[data-format=date],input[data-format=datetime]").each(function (ignore, element) {
+            let drops;
             let input = $(element);
             let parent;
 
-            if (!form.parents(".content-wrapper").length) {
+            if (form.parents(".content-wrapper").length) {
+                drops = "auto";
+            } else {
                 parent = input.parent();
             }
 
             input.daterangepicker({
                 autoApply: true,
                 autoUpdateInput: false,
-                drops: "auto",
+                drops,
                 locale: {format: input.data("pattern")},
                 parentEl: parent,
                 showDropdowns: true,

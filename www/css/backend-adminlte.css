@@ -26,6 +26,11 @@ th a, th:hover a {
     background-image: url(img/redox-02.png);
 }
 
+.content-wrapper > .content {
+    margin: 0 auto;
+    max-width: 1550px;
+}
+
 .deploy-item {
     background-color: white;
     height: 50px;
@@ -41,10 +46,6 @@ th a, th:hover a {
 
 .deploy-item.sortable-ghost {
     border: 3px solid var(--info) !important;
-}
-
-.daterangepicker {
-    z-index: auto;
 }
 
 .daterangepicker select {
@@ -189,6 +190,16 @@ th a, th:hover a {
 
 .w-1 {
     width: 1%;
+}
+
+@media (min-width: 992px) {
+    .block-modules {
+        column-count: 2;
+    }
+
+    .block-modules > label {
+        break-inside: avoid;
+    }
 }
 
 @media (min-width: 1600px) {

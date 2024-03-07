@@ -23,7 +23,7 @@
                         <span>&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="_{{ formId }}">
+                <div class="modal-body" id="_{{ formId }}" style="overflow-y:auto">
                     {% include 'backend/form/inputs.twig' with {
                         controller,
                         data: result.data,
