@@ -1,6 +1,12 @@
 {% for path in data[name] ? data[name]|split(',') : [] %}
-    {% set info = file(path) %}
-    <a class="d-block py-1" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
-        {{ info.name }}
-    </a>
+    {% set icon, info = column.useIcon, file(path) %}
+    {% if icon %}
+        <a class="d-block py-1 text-reset" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
+            <i class="{{ cfg("backend.icon-#{icon}") }}"></i>
+        </a>
+    {% else %}
+        <a class="d-block py-1" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
+            {{ info.name }}
+        </a>
+    {% endif %}
 {% endfor %}

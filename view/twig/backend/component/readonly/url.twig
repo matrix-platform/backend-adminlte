@@ -2,7 +2,7 @@
 <div class="py-2">
     {% if url %}
         {% if icon %}
-            <a class="text-reset" href="{{ url }}" target="_blank"><i class="fa-2x {{ cfg("backend.icon-#{icon}") }}"></i></a>
+            <a class="text-reset" href="{{ url }}" target="_blank"><i class="{{ cfg("backend.icon-#{icon}") }}"></i></a>
         {% else %}
             <a href="{{ url }}" target="_blank">{{ url }}</a>
         {% endif %}
