@@ -1,12 +1,13 @@
 {% for path in data[name] ? data[name]|split(',') : [] %}
     {% set icon, info = column.useIcon, file(path) %}
+    {% set filename = include(template_from_string(column.filename), data|merge({_file: info}), false) %}
     {% if icon %}
-        <a class="d-block py-1 text-reset" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
+        <a class="d-block py-1 text-reset" download="{{ filename }}" href="{{ path|file }}" title="{{ info.description }}">
             <i class="{{ cfg("backend.icon-#{icon}") }}"></i>
         </a>
     {% else %}
-        <a class="d-block py-1" download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
-            {{ info.name }}
+        <a class="d-block py-1" download="{{ filename }}" href="{{ path|file }}" title="{{ info.description }}">
+            {{ filename }}
         </a>
     {% endif %}
 {% endfor %}

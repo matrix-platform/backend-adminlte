@@ -3,9 +3,10 @@
     <div class="{% if multiple %}attachment-container file-container {% endif %}list-group rounded-0">
         {% for path in paths %}
             {% set info = file(path) %}
+            {% set filename = include(template_from_string(column.filename), data|merge({_file: info}), false) %}
             <div class="attachment-wrapper file-wrapper list-group-item">
-                <a download="{{ info.name }}" href="{{ path|file }}" title="{{ info.description }}">
-                    {{ info.name }}
+                <a download="{{ filename }}" href="{{ path|file }}" title="{{ info.description }}">
+                    {{ filename }}
                 </a>
                 <div class="btn-group">
                     <button class="btn btn-default btn-flat border-0" data-ajax="file-info/{{ info.id }}" data-args="modal">
