@@ -1,4 +1,4 @@
-{% set ignore = controller.response.headers({'Content-Type': 'text/xml; charset=UTF-8'}) %}
+{% set ignore = controller.response.xml(true) %}
 <?xml version="1.0" encoding="UTF-8"?>
 <response>
 

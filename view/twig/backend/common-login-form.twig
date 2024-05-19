@@ -48,33 +48,42 @@
         <script src="adminlte/plugins/toastr/toastr.min.js"></script>
         <script src="adminlte/dist/js/adminlte.min.js"></script>
         <script src="js/{{ cfg('system.csrf-token-type') }}-token.js?{{ version }}"></script>
+        <script src="js/matrix-crypto.js?{{ version }}"></script>
         <script>
             $("form").submit(function () {
                 var overlay = $(".overlay-wrapper");
 
                 if (overlay.is(":hidden")) {
-                    var data = {
-                        username: $("input[name=username]").val(),
-                        password: $("input[name=password]").val()
-                    };
+                    const data = {};
 
                     overlay.show();
 
-                    $.ajax({
-                        contentType: "application/json",
-                        data: JSON.stringify(data),
-                        type: "POST",
-                        url: "{{ constant('APP_ROOT') }}{{ cfg('backend.folder') ?: 'backend' }}/user/login"
-                    }).done(function (response) {
-                        if (response.success) {
-                            location.replace("{{ result.path }}");
-                        } else {
-                            toastr.error(response.message || response.error);
+                    aesEncrypt(JSON.stringify({
+                        username: $("input[name=username]").val(),
+                        password: $("input[name=password]").val(),
+                        timestamp: Date.now()
+                    })).then((encrypted) => {
+                        data.DATA = encrypted;
+
+                        return rsaEncrypt(localStorage.getItem("MATRIX_AES"));
+                    }).then((encrypted) => {
+                        data.KEY = encrypted;
+
+                        $.ajax({
+                            data,
+                            type: "POST",
+                            url: "{{ constant('APP_ROOT') }}{{ cfg('backend.folder') ?: 'backend' }}/user/login"
+                        }).done(function (response) {
+                            if (response.success) {
+                                location.replace("{{ result.path }}");
+                            } else {
+                                toastr.error(response.message || response.error);
+                                overlay.hide();
+                            }
+                        }).fail(function (response) {
+                            toastr.error(response.statusText);
                             overlay.hide();
-                        }
-                    }).fail(function (response) {
-                        toastr.error(response.statusText);
-                        overlay.hide();
+                        });
                     });
                 }
 

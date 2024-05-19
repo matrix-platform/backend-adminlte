@@ -1,4 +1,4 @@
-/*global $,Sortable,_,atob,btoa,google,history,i18n,toastr*/
+/*global $,Sortable,_,aesEncrypt,atob,btoa,console,google,history,i18n,toastr*/
 /*jslint browser,long,nomen*/
 
 (function () {
@@ -330,7 +330,7 @@
         return {parameters, url};
     };
 
-    let perform = function (path, parameters, options = {}) {
+    let perform = async function (path, parameters, options = {}) {
         let form = options.form || new FormData();
 
         if (!$.isPlainObject(parameters)) {
@@ -347,7 +347,9 @@
             $.extend(parameters, options.parameters);
         }
 
-        form.append("JSON", JSON.stringify(parameters));
+        console.debug(parameters);
+
+        form.set("DATA", await aesEncrypt(JSON.stringify(parameters)));
 
         let count = 0;
         let size = 0;
@@ -1087,14 +1089,13 @@
         let checkbox = $(event.currentTarget).prop("disabled", true);
         let value = checkbox.prop("checked");
 
-        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}, {overlay: false}).done(function (data) {
+        perform(`set-${checkbox.data("switch")}`, {id: checkbox.attr("id"), value}, {overlay: false}).then(function (data) {
             if (!data.success) {
                 checkbox.prop("checked", !value);
             }
-        }).fail(function () {
-            checkbox.prop("checked", !value);
-        }).always(function () {
             checkbox.prop("disabled", false);
+        }, function () {
+            checkbox.prop("checked", !value).prop("disabled", false);
         });
     }).delegate("select[data-reaction]", "change", function (event) {
         let parameters = {};

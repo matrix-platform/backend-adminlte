@@ -124,6 +124,7 @@
         {%~ block script %}{% endblock %}
         <script src="{{ prefix }}js/label-editor.js?{{ version }}"></script>
         <script src="{{ prefix }}js/{{ cfg('system.csrf-token-type') }}-token.js?{{ version }}"></script>
+        <script src="{{ prefix }}js/matrix-crypto.js?{{ version }}"></script>
         <script src="locale.js?{{ version }}"></script>
         <script data-language="{{ language }}" data-max-file-count="{{ result.max_file_uploads }}" data-max-file-size="{{ result.upload_max_filesize }}" data-max-post-size="{{ result.post_max_size }}" data-path="{{ controller.args()|join('/') }}" src="{{ prefix }}js/backend-adminlte.js?{{ version }}"></script>
     </body>
